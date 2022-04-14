@@ -1,51 +1,65 @@
 <template>
   <div class="admin">
 
-      <div class="dates container-fluid">
-        <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate}" @click="selectDate(date)">
-          <span class="day-name">{{dayName(date)}}</span>
-          <span class="day-date">{{formatDate(date)}}</span>
-          <span class="day-status not-available" v-if="hasTerms(date)">Prosto</span>
-          <span class="day-status available" v-else>Bl Bula</span>
-        </div>
+    <template v-if="!loading">
+      <div class="text-center mb-3">
+        <a class="text-muted" role="button" @click="reload()" style="font-size: 12px;">
+          Dans smo {{ formatDate(dateNow()) }}
+        </a>
       </div>
 
+      <div class="dates container-fluid">
+        <i class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+        <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date)">
+          <span class="day-name">{{dayName(date)}}</span>
+          <span class="day-date">{{formatDate(date)}}</span>
+          <span class="day-status" v-if="hasTerms(date)">Prosto</span>
+          <span class="day-status" v-else>Bl Bula</span>
+        </div>
+        <i class="bi bi-caret-right-fill right" @click="goRight()"></i>
+      </div>
+
+      <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
+
       <div class="terms container-fluid">
-        <table class="table table-hover">
+        <table class="table table-hover" v-if="timetable[selectedDate] && timetable[selectedDate].length != 0">
           <thead>
             <tr>
               <th>Čas</th>
               <th>Rezerviral</th>
-              <th>Kontakt</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="term in timetable[selectedDate]" :key="term.time" class="term" :class="{'reserved': term.reserved}">
+            <tr v-for="term in timetable[selectedDate]" :key="term.time" class="term" :class="{'reserved': term.reserved}" @click="selectTerm(term)">
               <td class="term-time">{{term.time}}</td>
               <template v-if="term.reserved">
                 <td v-if="term.reserved">{{term.name}}</td>
-                <td v-if="term.reserved">{{term.contact}}</td>
               </template>
               <template v-else>
-                <td></td>
                 <td></td>
               </template>
             </tr>
           </tbody>
         </table>
+        <h3 v-else class="text-center">Ni terminov</h3>
       </div>
 
-      <div class="container-fluid d-flex justify-content-center mt-5">
-        <p>Dela</p><i class="bi bi-clipboard"></i>
+      <div class="container-fluid d-flex justify-content-center mt-3">
+        <i class="bi bi-plus-circle-fill" id="add-term" @click="toggleAddTerm(true)"></i>
       </div>
-
+    </template>
 
   </div>
+
+  <add-term v-if="addTermPopup" @cancel="toggleAddTerm(false)" :date="selectedDate" @saved="fetchTimetable" />
+  <show-term v-if="selectedTerm" @cancel="selectTerm(null)" :term="selectedTerm" @saved="fetchTimetable" />
+  
 </template>
 
 <script>
 
 import {backendUrl} from '../../config.js';
+import {dayName, formatDate} from '../../helpers/functions.js';
 
 export default {
   name: 'AdminIndex',
@@ -53,7 +67,15 @@ export default {
     return {
       timetable: [],
       allTimes: [],
+      startDate: this.getStartDate(),
+      loadDaysNumber: 4,
       selectedDate: null,
+
+      loading: true,
+
+      addTermPopup: false,
+      showTermPopup: false,
+      selectedTerm: null,
     }
   },
   props: {
@@ -66,23 +88,57 @@ export default {
   },
   methods: {
       fetchTimetable() {
-        this.axios.get(`${backendUrl}/admin/terms`)
+        this.loading = true;
+        this.axios.get(`${backendUrl}/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data;
+                console.log('Timetable: ',this.timetable);
                 // select first available date
-                if (!this.selectedDate) {
+                if (!this.selectedDate || !this.orderedDates.includes(this.selectedDate)) {
                   this.selectedDate = this.orderedDates[0];
                 }
+                this.loading = false;
             });
       },
-      getTermsForTime(time) {
-        const terms = [];
-        for (const date of this.orderedDates) {
-          const termAtTime = this.timetable[date].find((term) => term.time == time) || null;
-          terms.push(termAtTime);
-        }
-        return terms;
+
+      goRight() {
+        const date = new Date(this.startDate);
+        date.setDate(date.getDate() + this.loadDaysNumber);  
+        this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+        console.log(this.startDate);
+        this.fetchTimetable();
       },
+      goLeft() {
+        const date = new Date(this.startDate);
+        date.setDate(date.getDate() - this.loadDaysNumber);  
+        this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+        console.log(this.startDate);
+        this.fetchTimetable();
+      },
+
+
+      toggleAddTerm(show) {
+        this.addTermPopup = show;
+      },
+      selectTerm(term) {
+        this.selectedTerm = term;
+      },
+
+
+      selectDate(date) {
+        this.selectedDate = date;
+      },
+      hasTerms(date) {
+        return this.timetable[date] && this.timetable[date].length !== 0;
+      },
+      getStartDate() {
+        return this.dateNow();
+      },
+      dateNow() {
+        let date = new Date();
+        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+      },
+
       getAllTimes() {
           let time =  '6:00';
           let i =0;
@@ -99,33 +155,38 @@ export default {
               i ++;
           }
       },
-      selectDate(date) {
-        this.selectedDate = date;
-      },
-      hasTerms(date) {
-        return this.timetable[date].length !== 0;
-      },
       dayName(date) {
-        var days = ['Ned', 'Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob'];
-        var dateObj = new Date(date);
-        return days[dateObj.getDay()];
+        return dayName(date);
       },
       formatDate(date) {
-          var dateObj = new Date(date);
-          return `${dateObj.getDate()}.${dateObj.getMonth()}`;
+        return formatDate(date);
       },
+      reload() {
+        window.location.reload();
+      }
   },
   created() {
       this.fetchTimetable();
   },
   mounted() {
       this.getAllTimes();
+      console.log(this.getStartDate());
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+
+#add-term {
+  font-size: 3em;
+  cursor: pointer;
+}
+#add-term:hover {
+  font-size: 3em;
+  color: rgb(100,100,100);
+}
 
 
 /* TERMS */
@@ -145,7 +206,7 @@ export default {
 }
 
 .term.reserved {
-  background: rgba(220, 53, 69, 0.8);
+  background: rgba(220, 53, 69, 0.6);
 }
 
 .term-time {
@@ -154,12 +215,22 @@ export default {
 }
 
 /* NAVIGATION */
+
+.left, .right {
+  font-size: 3em;
+  cursor: pointer;
+}
+.left:hover, .right:hover {
+  color: rgb(100,100,100);
+}
+
 .dates {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 5vw;
-  padding-right: 5vw;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 94vw;
 }
 
 .date {
@@ -168,8 +239,11 @@ export default {
   align-content: center;
   justify-content: center;
   background: rgba(210,210,210, 0.5);
-  border-right: 2px rgb(210,210,210) solid;
+  border-right: 2px rgb(190,190,190) solid;
   padding: 10px;
+  white-space: nowrap;
+}
+.date.no-terms {
 }
 .date.selected {
   background: #000;
@@ -196,10 +270,10 @@ export default {
 .day-date {
   font-size: 1.5em;
   font-weight: bold;
-  color: rgb(98,107,115);
+  color: rgb(88,97,105);
 }
 .selected .day-date {
-  color: rgb(200,200,200) !important;
+  color: rgb(230,230,230) !important;
 }
 .day-status {
   font-size: 0.8em;

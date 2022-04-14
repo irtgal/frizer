@@ -26,8 +26,25 @@ export default {
 </script>
 
 <template>
-  <a href="#/">Home</a> |
-  <a href="#/about">About</a> |
-  <a href="#/non-existent-path">Broken Link</a>
-  <component :is="currentView" />
+  <div class="app">
+    <component :is="currentView" />
+  </div>
 </template>
+<style>
+.app {
+  margin-top: 20px;
+}
+.shade {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(0,0,0,0.6);
+    height: 100vh;
+}
+.close-btn {
+    padding: 10px;
+    cursor: pointer;
+}
+</style>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Term;
 use Exception;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TermControllerAdmin extends Controller
 {
@@ -17,10 +18,10 @@ class TermControllerAdmin extends Controller
     {
         $startDate = date("Y-m-d");
         if ($request['start_date'] && (bool) strtotime($request['start_date'])) {
-            $startDate = date_create_from_format('d.m.Y', $request['start_date'])->format('Y-m-d');
+            $startDate = $request['start_date'];
         }
 
-        $loadDays = 7;
+        $loadDays = 3;
         if ($request['load_days']) {
             $loadDays = $request['load_days'];
         }
@@ -43,13 +44,19 @@ class TermControllerAdmin extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'time' => ['required'], //, 'date_format:H:i'],
-            'date' => ['required'], //, 'date_format:d.m.Y'],
+            'date' => ['required'], // , 'date_format:Y-m-d'],
+            'start' => ['required', 'date_format:H:i'],
+            'end' => ['required', 'date_format:H:i'],
         ]);
-        $full_time_string = $data['time'] . ' ' . $data['date'];
-        $full_date_time = date_create_from_format('H:i Y-m-d', $full_time_string);
-        $newTerm = Term::create(['full_time' => $full_date_time]);
-        return $newTerm;
+        $startTime = Carbon::createFromFormat('H:i Y-m-d',  $data['start'] . " " . $data["date"]);
+        $endTime = Carbon::createFromFormat('H:i Y-m-d',  $data['end'] . " " . $data["date"]);
+        while ($startTime < $endTime) {
+            if (!Term::where('full_time', $startTime)->exists()) {
+                Term::create(['full_time' => $startTime]);
+            }
+            $startTime = $startTime->addMinutes(30);
+        }
+        return $endTime;
 
     }
 

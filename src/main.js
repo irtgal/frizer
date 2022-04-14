@@ -8,7 +8,18 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 import "bootstrap/dist/js/bootstrap.js"
 
+import 'bootstrap-icons/font/bootstrap-icons.css'
+
+// components
+
+
+import AddTerm from './components/Admin/AddTerm.vue';
+import ShowTerm from './components/Admin/ShowTerm.vue';
+
 const app = Vue.createApp(App);
+
+app.component('AddTerm', AddTerm);
+app.component('ShowTerm', ShowTerm);
 
 app.config.globalProperties.axios=axios
 
