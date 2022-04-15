@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TermControllerAdmin;
+use App\Http\Controllers\TermControllerClient;
 
 
 /*
@@ -24,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // ADMIN
 Route::apiResource('/admin/terms', TermControllerAdmin::class);
+Route::apiResource('/client/terms', TermControllerClient::class);
+Route::get('/client/types', [TermControllerClient::class, 'types']);

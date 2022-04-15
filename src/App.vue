@@ -1,23 +1,33 @@
 <script>
 import AdminIndex from './components/Admin/Index.vue';
+import ClientIndex from './components/Client/Index.vue';
+import ShowTerm from './components/Client/ShowTerm.vue';
 
 const routes = {
   // admin
-  '/admin/': AdminIndex,
+  '/admin': AdminIndex,
+  '/': ClientIndex,
+  'rezervacija': ShowTerm,
 }
 
 export default {
   data() {
 	return {
-    currentPath: window.location.hash
+    currentPath: window.location.hash || window.location.pathname
 	}
   },
   computed: {
 	currentView() {
-    return routes[this.currentPath.slice(1) || '/'] 
+    if (window.location.hash) {
+      console.log('Navigating hash');
+      return routes[this.currentPath.slice(1) || '/'];
+    }
+    const rootPath = window.location.pathname.split('/')[1] || '/';
+    return routes[rootPath];
 	}
   },
   mounted() {
+    console.log(this.currentPath, this.currentView);
 	window.addEventListener('hashchange', () => {
       this.currentPath = window.location.hash
 		})
@@ -47,4 +57,100 @@ export default {
     padding: 10px;
     cursor: pointer;
 }
+
+
+/* TERMS */
+.terms {
+  display: grid;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  margin-top: 2em;
+}
+
+.terms table {
+  text-align: center;
+}
+
+.term:hover {
+  cursor: pointer;
+}
+
+.term.reserved {
+  background: rgba(220, 53, 69, 0.6);
+}
+
+.term-time {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+/* NAVIGATION */
+
+.left, .right {
+  font-size: 3em;
+  cursor: pointer;
+}
+.left:hover, .right:hover {
+  color: rgb(100,100,100);
+}
+
+.dates {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 94vw;
+}
+
+.date {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  background: rgba(210,210,210, 0.5);
+  border-right: 2px rgb(190,190,190) solid;
+  padding: 10px;
+  white-space: nowrap;
+}
+.date.no-terms {
+}
+.date.selected {
+  background: #000;
+}
+.date:hover {
+  cursor: pointer;
+}
+.date:last-of-type {
+  border-right: none;
+}
+.date span {
+  text-align: center;
+}
+
+.day-name {
+  font-size: 1em;
+}
+.selected .day-name {
+  color: white;
+}
+.selected .day-name {
+  color: rgba(220,220,220, 0.9);
+}
+.day-date {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: rgb(88,97,105);
+}
+.selected .day-date {
+  color: rgb(230,230,230) !important;
+}
+.day-status {
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.selected .day-status {
+  color: rgba(220,220,220, 0.9);
+}
+
 </style>

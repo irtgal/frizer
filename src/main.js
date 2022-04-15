@@ -15,11 +15,13 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import AddTerm from './components/Admin/AddTerm.vue';
 import ShowTerm from './components/Admin/ShowTerm.vue';
+import ReserveTerm from './components/ReserveTerm.vue';
 
 const app = Vue.createApp(App);
 
 app.component('AddTerm', AddTerm);
 app.component('ShowTerm', ShowTerm);
+app.component('ReserveTerm', ReserveTerm);
 
 app.config.globalProperties.axios=axios
 

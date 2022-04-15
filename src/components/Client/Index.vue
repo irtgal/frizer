@@ -9,7 +9,7 @@
       </div>
 
       <div class="dates container-fluid">
-        <i class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+        <i v-if="startDate != dateNow()" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
         <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date); togglePopup('showTerm', true)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>
@@ -26,33 +26,22 @@
           <thead>
             <tr>
               <th>Čas</th>
-              <th>Rezerviral</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="term in timetable[selectedDate]" :key="term.time" class="term" :class="{'reserved': term.reserved}"  @click="selectTerm(term)">
               <td class="term-time">{{term.time}}</td>
-              <template v-if="term.reserved">
-                <td v-if="term.reserved">{{term.name}}</td>
-              </template>
-              <template v-else>
-                <td></td>
-              </template>
             </tr>
           </tbody>
         </table>
         <h3 v-else class="text-center">Ni terminov</h3>
       </div>
 
-      <div class="container-fluid d-flex justify-content-center mt-3">
-        <i class="bi bi-plus-circle-fill" id="add-term" @click="togglePopup('addTerm', true)"></i>
-      </div>
     </template>
 
   </div>
 
-  <add-term v-if="visible.addTerm" @cancel="togglePopup('addTerm', false)" :date="selectedDate" @saved="fetchTimetable" />
-  <reserve-term v-if="selectedTerm" :admin="true"
+  <reserve-term v-if="selectedTerm" :admin="false"
    @cancel="selectTerm(null)" :term="selectedTerm" :types="types" @saved="fetchTimetable" />
   
 </template>
@@ -77,11 +66,6 @@ export default {
       loading: true,
 
       selectedTerm: null,
-      visible: {
-        addTerm: false,
-        showTerm: false,
-        reserveTerm: false,
-      },
     }
   },
   props: {
@@ -95,7 +79,7 @@ export default {
   methods: {
       fetchTimetable() {
         this.loading = true;
-        this.axios.get(`${backendUrl}/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
+        this.axios.get(`${backendUrl}/client/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data;
                 console.log('Timetable: ',this.timetable);

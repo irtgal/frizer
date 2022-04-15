@@ -19,6 +19,7 @@ class CreateTermsTable extends Migration
             $table->boolean('reserved')->default(false);
             $table->string('name')->nullable();
             $table->string('contact')->nullable();
+            $table->integer('type')->nullable();
             $table->timestamps();
 
 
