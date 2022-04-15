@@ -64,6 +64,7 @@ export default {
   text-align: center;
 }
 
+
 .term:hover {
   cursor: pointer;
 }
@@ -75,6 +76,7 @@ export default {
 .term-time {
   font-size: 1.1em;
   font-weight: bold;
+  padding: 15px !important;
 }
 
 /* NAVIGATION */
@@ -144,6 +146,10 @@ export default {
 }
 .selected .day-status {
   color: rgba(220,220,220, 0.9);
+}
+
+td {
+  vertical-align: middle;
 }
 
 </style>

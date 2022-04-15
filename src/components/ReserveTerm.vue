@@ -42,7 +42,7 @@
                 <label for="exampleInputEmail1">Kontakt</label>
                 <input type="text" class="form-control" v-model="contact" />
             </div>
-            <p v-if="error" class="text-danger">{{error}}</p>
+            <p v-if="error" class="text-danger my-1 text-center">{{error}}</p>
 
         </template>
 
@@ -51,7 +51,7 @@
         <template v-if="admin">
 
           <button  @click="remove" type="button" class="btn btn-danger"  data-dismiss="modal">Odstrani</button>
-          <button v-if="term.reserved"  @click="clearTerm" type="button" class="btn btn-secondary" data-dismiss="modal">Počisti rezervacijo</button>
+          <button v-if="term.reserved" @click="clearTerm" type="button" class="btn btn-secondary" data-dismiss="modal">Počisti rezervacijo</button>
           <button @click="save" type="button" class="btn btn-dark">Shrani</button>
         </template>
 
@@ -94,8 +94,8 @@ export default {
           this.cancel();
           return;
         }
-        if (!this.name || !this.typeId) {
-          this.error = 'Manjkajo podatki';
+        if (!this.name.trim() || !this.typeId) {
+          this.error = 'Ime in tip storitve sta obvezna';
           return;
         }
         this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
