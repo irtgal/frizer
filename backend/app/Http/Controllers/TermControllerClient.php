@@ -41,6 +41,9 @@ class TermControllerClient extends Controller
     {
         $term = Term::findOrFail($id);
         if ($request['reserved'] && $request['name'] && $request['type']) {
+            if ($term->reserved) {
+                return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
+            }
             $term->update(['reserved'=> true, 'name' => $request['name'], 'type'=> $request['type'],'contact'=> $request['contact']]);
         } else {
             $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);

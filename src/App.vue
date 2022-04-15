@@ -1,36 +1,29 @@
 <script>
 import AdminIndex from './components/Admin/Index.vue';
 import ClientIndex from './components/Client/Index.vue';
-import ShowTerm from './components/Client/ShowTerm.vue';
+import TermConfirmation from './components/Client/TermConfirmation.vue';
 
 const routes = {
   // admin
-  '/admin': AdminIndex,
+  'admin': AdminIndex,
   '/': ClientIndex,
-  'rezervacija': ShowTerm,
+  'rezervacija': TermConfirmation,
 }
 
 export default {
   data() {
 	return {
-    currentPath: window.location.hash || window.location.pathname
+    currentPath: window.location.pathname
 	}
   },
   computed: {
 	currentView() {
-    if (window.location.hash) {
-      console.log('Navigating hash');
-      return routes[this.currentPath.slice(1) || '/'];
-    }
     const rootPath = window.location.pathname.split('/')[1] || '/';
     return routes[rootPath];
 	}
   },
   mounted() {
     console.log(this.currentPath, this.currentView);
-	window.addEventListener('hashchange', () => {
-      this.currentPath = window.location.hash
-		})
   }
 }
 </script>

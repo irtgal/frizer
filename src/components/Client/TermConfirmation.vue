@@ -2,9 +2,9 @@
   <div class="show-term" v-if="!loading && term && term.reserved">
     <i class="bi bi-check-circle check"></i>
     <h1>Vse štima</h1>
-    <div v-if="term.reserved" class="details mt-4">
+    <div v-if="term.reserved" class="details mt-5">
         <div class="form-group">
-            <label for="exampleInputEmail1">Čas termina</label>
+            <label>Čas termina</label>
             <h3>{{fullTermTime()}} ob {{term.time}}</h3>
         </div>
         <div class="form-group mt-3">
@@ -12,11 +12,15 @@
             <h3>{{term.name }}</h3>
         </div>
         <div class="form-group mt-3">
-            <label for="exampleInputEmail1">Storitev</label>
+            <label>Storitev</label>
             <h3>{{getType(term.type).name}}</h3>
         </div>
         <div class="form-group mt-3">
-            <label for="exampleInputEmail1">Kontakt</label>
+            <label>Cena</label>
+            <h3>{{getType(term.type).price}}€</h3>
+        </div>
+        <div class="form-group mt-3">
+            <label>Kontakt</label>
             <h3>{{term.contact}} </h3>
         </div>
     </div>
@@ -63,13 +67,18 @@ export default {
       return this.types.find((type) => type.id = typeId);
     },
     fullTermTime() {
-        console.log(dayName(this.term.date));
         return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
     }
   },
   created() {
     this.fetchTypes();
     this.fetchTerm();
+  },
+  mounted() {
+    window.addEventListener('popstate', (e) => {
+      e.preventDefault();
+      alert('nazaj');
+    })
   }
 }
 </script>
@@ -80,6 +89,7 @@ export default {
   width: 80%;
   margin: auto;
   text-align: center;
+  margin-top: 2em;
 }
 .details {
 }

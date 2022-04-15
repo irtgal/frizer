@@ -52,8 +52,8 @@
   </div>
 
   <add-term v-if="visible.addTerm" @cancel="togglePopup('addTerm', false)" :date="selectedDate" @saved="fetchTimetable" />
-  <reserve-term v-if="selectedTerm" :admin="true"
-   @cancel="selectTerm(null)" :term="selectedTerm" :types="types" @saved="fetchTimetable" />
+  <reserve-term v-if="selectedTerm" :admin="true" :term="selectedTerm" :types="types"
+    @cancel="selectTerm(null)" @saved="fetchTimetable" />
   
 </template>
 
@@ -117,14 +117,12 @@ export default {
         const date = new Date(this.startDate);
         date.setDate(date.getDate() + this.loadDaysNumber);  
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        console.log(this.startDate);
         this.fetchTimetable();
       },
       goLeft() {
         const date = new Date(this.startDate);
         date.setDate(date.getDate() - this.loadDaysNumber);  
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        console.log(this.startDate);
         this.fetchTimetable();
       },
 
@@ -133,7 +131,6 @@ export default {
       },
       togglePopup(name, visible) {
         this.visible[name] = visible;
-        console.log(this.visible);
       },
 
 

@@ -2,15 +2,10 @@
   <div class="admin">
 
     <template v-if="!loading">
-      <div class="text-center mb-3">
-        <a class="text-muted" role="button" @click="reload()" style="font-size: 12px;">
-          Dans smo {{ formatDate(dateNow()) }}
-        </a>
-      </div>
 
-      <div class="dates container-fluid">
+      <div class="dates container-fluid mt-5">
         <i v-if="startDate != dateNow()" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
-        <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date); togglePopup('showTerm', true)">
+        <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>
           <span class="day-status" v-if="hasTerms(date)">Prosto</span>
@@ -101,23 +96,17 @@ export default {
         const date = new Date(this.startDate);
         date.setDate(date.getDate() + this.loadDaysNumber);  
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        console.log(this.startDate);
         this.fetchTimetable();
       },
       goLeft() {
         const date = new Date(this.startDate);
         date.setDate(date.getDate() - this.loadDaysNumber);  
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        console.log(this.startDate);
         this.fetchTimetable();
       },
 
       selectTerm(term) {
         this.selectedTerm = term;
-      },
-      togglePopup(name, visible) {
-        this.visible[name] = visible;
-        console.log(this.visible);
       },
 
 
@@ -162,13 +151,10 @@ export default {
       }
   },
   created() {
+      this.getAllTimes();
       this.fetchTypes();
       this.fetchTimetable();
   },
-  mounted() {
-      this.getAllTimes();
-      console.log(this.getStartDate());
-  }
 }
 </script>
 

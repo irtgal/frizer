@@ -35,13 +35,14 @@
             <div class="form-group mt-3">
               <label>Storitev</label>
               <select class="form-control" v-model="typeId">
-                <option v-for="type in types" v-bind:value="type.id" :key="type.id">{{type.name}}</option>
+                <option v-for="type in types" v-bind:value="type.id" :key="type.id">{{type.name}} - {{type.price}}€</option>
               </select>
             </div>
             <div class="form-group mt-3">
                 <label for="exampleInputEmail1">Kontakt</label>
                 <input type="text" class="form-control" v-model="contact" />
             </div>
+            <p v-if="error" class="text-danger">{{error}}</p>
 
         </template>
 
@@ -103,15 +104,19 @@ export default {
           'contact': this.contact,
           'type': this.typeId,
         })
-        .then((response) => {
-          if (this.admin) {
-            this.$emit('saved');
-            this.cancel();
-            return;
-          }
-          console.log(response);
-          window.location.href = `/rezervacija/${response.data.id}`;
-        })
+          .then((response) => {
+            if (response.data.error) {
+              this.error = response.data.error;
+              this.$emit('saved');
+              return;
+            }
+            if (this.admin) {
+              this.$emit('saved');
+              this.cancel();
+              return;
+            }
+            window.location.href = `/rezervacija/${response.data.id}`;
+          })
 
       },
       clearTerm() {
