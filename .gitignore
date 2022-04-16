@@ -22,7 +22,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+backend/
 *.php
-backend/Procfile
-src/config.js
-src/config.js
