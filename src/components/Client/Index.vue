@@ -4,7 +4,10 @@
     <template v-if="!loading">
 
       <div class="dates container-fluid mt-5">
+
         <i v-if="startDate != dateNow()" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+        <i v-else class="bi bi-caret-left-fill left" style="visibility: hidden;"></i>
+        
         <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>

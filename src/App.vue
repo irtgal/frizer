@@ -56,9 +56,9 @@ export default {
 /* TERMS */
 .terms {
   display: grid;
-  padding-left: 5vw;
-  padding-right: 5vw;
   margin-top: 2em;
+  padding-left: 8vw !important;
+  padding-right: 8vw !important;
 }
 
 .terms table {
@@ -94,9 +94,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  max-width: 94vw;
+  width: 100%;
 }
 
 .date {
