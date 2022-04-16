@@ -147,6 +147,18 @@ export default {
   color: rgba(220,220,220, 0.9);
 }
 
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 td {
   vertical-align: middle;
 }

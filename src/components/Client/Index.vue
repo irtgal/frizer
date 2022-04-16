@@ -1,5 +1,13 @@
 <template>
-  <div class="admin">
+
+  <!-- spinner -->
+  <div v-if="firstLoad" class="spinner-container">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+
+  <div v-else class="admin">
 
     <template v-if="!loading && firstAvailableDate">
 
@@ -8,7 +16,6 @@
           Dans smo {{ formatDate(dateNow()) }}
         </a>
       </div>
-
       <div class="dates container-fluid mt-4">
         <!-- right icon -->
         <i v-if="firstAvailableDate < orderedDates[0]" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
@@ -84,6 +91,7 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
+      firstLoad: true,
 
       selectedTerm: null,
     }
@@ -114,7 +122,10 @@ export default {
                 if (!this.selectedDate || !this.orderedDates.includes(this.selectedDate)) {
                   this.selectedDate = this.orderedDates[0];
                 }
-                this.loading = false;
+            })
+            .finally(() => {
+              this.loading = false;
+              this.firstLoad = false;
             });
       },
       fetchTypes() {

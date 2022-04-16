@@ -1,5 +1,12 @@
 <template>
-  <div class="admin">
+  <!-- spinner -->
+  <div v-if="firstLoad" class="spinner-container">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+
+  <div v-else class="admin">
 
     <template v-if="!loading">
       <div class="text-center mb-3">
@@ -76,6 +83,7 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
+      firstLoad: true,
 
       selectedTerm: null,
       visible: {
@@ -105,6 +113,9 @@ export default {
                   this.selectedDate = this.orderedDates[0];
                 }
                 this.loading = false;
+            })
+            .finally(() => {
+              this.firstLoad = false;
             });
       },
       fetchTypes() {
