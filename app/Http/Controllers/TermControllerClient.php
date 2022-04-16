@@ -17,9 +17,25 @@ class TermControllerClient extends Controller
      */
     public function index(Request $request)
     {
-        $startDate = date("Y-m-d");
-        if ($request['start_date'] && (bool) strtotime($request['start_date'])) {
-            $startDate = $request['start_date'];
+        $minAvailableDate = Term::where('full_time', '>=', date("Y-m-d"))
+                ->where('reserved', false)
+                ->min('full_time');
+        if ($minAvailableDate) {
+            $minAvailableDate = Carbon::parse($minAvailableDate)->format('Y-m-d');
+        } else {
+            $minAvailableDate = null;
+        }
+
+        $maxAvailableDate = Term::where('reserved', false)->max('full_time');
+        if ($maxAvailableDate) {
+            $maxAvailableDate = Carbon::parse($maxAvailableDate)->format('Y-m-d');
+        } else {
+            $maxAvailableDate = null;
+        }
+
+        $startDate = $request['start_date'];
+        if (!$startDate || !(bool) strtotime($startDate)) {
+            $startDate = $minAvailableDate;
         }
 
         $loadDays = 3;
@@ -33,7 +49,14 @@ class TermControllerClient extends Controller
             $incrementedDate = date("Y-m-d", $incrementDay);
             $termsForDay[$incrementedDate] = Term::whereDate('full_time', $incrementedDate)->where('reserved', false)->orderBy('full_time')->get();
         }
-        return response()->json($termsForDay);
+
+
+        $response = [
+            'timetable' => $termsForDay,
+            'first_available_date' => $minAvailableDate,
+            'last_available_date' => $maxAvailableDate,
+        ];
+        return response()->json($response);
     }
 
     // reserve or unreserve term
