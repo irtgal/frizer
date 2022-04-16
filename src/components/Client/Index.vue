@@ -1,20 +1,31 @@
 <template>
   <div class="admin">
 
-    <template v-if="!loading">
+    <template v-if="!loading && firstAvailableDate">
 
-      <div class="dates container-fluid mt-5">
+      <div class="text-center">
+        <a class="text-muted" role="button" @click="reload()" style="font-size: 12px;">
+          Dans smo {{ formatDate(dateNow()) }}
+        </a>
+      </div>
 
-        <i v-if="startDate != dateNow()" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+      <div class="dates container-fluid mt-4">
+        <!-- right icon -->
+        <i v-if="firstAvailableDate < orderedDates[0]" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
         <i v-else class="bi bi-caret-left-fill left" style="visibility: hidden;"></i>
-        
+       
+        <!-- dates -->
         <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>
           <span class="day-status" v-if="hasTerms(date)">Prosto</span>
           <span class="day-status" v-else>Bl Bula</span>
         </div>
-        <i class="bi bi-caret-right-fill right" @click="goRight()"></i>
+
+        <!-- left icon -->
+        <i v-if="lastAvailableDate > orderedDates[orderedDates.length -1]" class="bi bi-caret-right-fill right" @click="goRight()"></i>
+        <i v-else class="bi bi-caret-right-fill left" style="visibility: hidden;"></i>
+
       </div>
 
       <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
@@ -40,6 +51,10 @@
       </div>
 
     </template>
+    <div v-else-if="!loading" class="no-available-terms">
+        <i class="bi bi-emoji-frown" style="font-size: 3em;"></i>     
+        <h3 class="mt-2">Trenutno ni na voljo nobenih terminov</h3> 
+    </div>
 
   </div>
 
@@ -59,7 +74,9 @@ export default {
   data: function () {
     return {
       timetable: [],
-      startDate: this.getStartDate(),
+      startDate: null,
+      firstAvailableDate: null,
+      lastAvailableDate: null,
       selectedDate: null,
       types: [],
 
@@ -84,8 +101,12 @@ export default {
         this.loading = true;
         this.axios.get(`${backendUrl}/client/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
-                this.timetable = response.data;
-                console.log('Timetable: ',this.timetable);
+                this.timetable = response.data.timetable;
+                this.firstAvailableDate = response.data["first_available_date"];
+                this.lastAvailableDate = response.data["last_available_date"];
+                if (!this.startDate) {
+                  this.startDate = this.firstAvailableDate;
+                }
                 // select first available date
                 if (!this.selectedDate || !this.orderedDates.includes(this.selectedDate)) {
                   this.selectedDate = this.orderedDates[0];
@@ -124,9 +145,6 @@ export default {
       },
       hasTerms(date) {
         return this.timetable[date] && this.timetable[date].length !== 0;
-      },
-      getStartDate() {
-        return this.dateNow();
       },
       dateNow() {
         let date = new Date();
@@ -178,6 +196,13 @@ export default {
 #add-term:hover {
   font-size: 3em;
   color: rgb(100,100,100);
+}
+
+.no-available-terms {
+  display: grid;
+  text-align: center;
+  align-items: center;
+  align-self: center;
 }
 
 
