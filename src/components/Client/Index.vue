@@ -93,6 +93,9 @@ export default {
   },
   computed: {
     orderedDates() {
+      if (!this.timetable) {
+        return [];
+      }
       return Object.keys(this.timetable).sort();
     }
   },
