@@ -13,7 +13,8 @@
         <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date); togglePopup('showTerm', true)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>
-          <span class="day-status" v-if="hasTerms(date)">Prosto</span>
+          <span class="day-status" v-if="areTermsFull(date)">Polno</span>
+          <span class="day-status" v-else-if="hasTerms(date)">Prosto</span>
           <span class="day-status" v-else>Bl Bula</span>
         </div>
         <i class="bi bi-caret-right-fill right" @click="goRight()"></i>
@@ -139,6 +140,12 @@ export default {
       },
       hasTerms(date) {
         return this.timetable[date] && this.timetable[date].length !== 0;
+      },
+      areTermsFull(date) {
+        if (!this.hasTerms(date)) {
+          return false;
+        }
+        return this.timetable[date].every((term) => term.reserved);
       },
       getStartDate() {
         return this.dateNow();
