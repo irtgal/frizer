@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body my-2">
         <div class="form-group">
-            <label for="exampleInputEmail1">Čas termina</label>
+            <label >Čas termina</label>
             <h3>{{fullTermTime()}} ob {{term.time}}</h3>
         </div>
 
@@ -19,17 +19,17 @@
                 <h3>{{term.name }}</h3>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Storitev</label>
+                <label >Storitev</label>
                 <h3 v-if="types.length > 0">{{getType(term.type).name}}</h3>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Kontakt</label>
+                <label >Kontakt</label>
                 <h3>{{term.contact}} </h3>
             </div>
         </template>
         <template v-else>
             <div class="form-group mt-3">
-                <label for="exampleInputEmail1">Ime</label>
+                <label >Ime</label>
                 <input type="text" class="form-control" v-model="name" />
             </div>
             <div class="form-group mt-3">
@@ -39,7 +39,7 @@
               </select>
             </div>
             <div class="form-group mt-3">
-                <label for="exampleInputEmail1">Kontakt</label>
+                <label >Kontakt</label>
                 <input type="text" class="form-control" v-model="contact" />
             </div>
             <p v-if="error" class="text-danger my-1 text-center">{{error}}</p>
@@ -49,7 +49,6 @@
       </div>
       <div class="modal-footer justify-content-between">
         <template v-if="admin">
-
           <button  @click="remove" type="button" class="btn btn-danger"  data-dismiss="modal">Odstrani</button>
           <button v-if="term.reserved" @click="clearTerm" type="button" class="btn btn-secondary" data-dismiss="modal">Počisti rezervacijo</button>
           <button @click="save" type="button" class="btn btn-dark">Shrani</button>
@@ -58,6 +57,7 @@
         <template v-else>
           <button @click="save" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>          
         </template>
+
       </div>
     </div>
   </div>
@@ -115,7 +115,7 @@ export default {
               this.cancel();
               return;
             }
-            window.location.href = `/rezervacija/${response.data.id}`;
+            window.location.hash = `/potrditev`;
           })
 
       },

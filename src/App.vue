@@ -4,29 +4,30 @@ import ClientIndex from './components/Client/Index.vue';
 import TermConfirmation from './components/Client/TermConfirmation.vue';
 
 const routes = {
-  // admin
-  'admin': AdminIndex,
+  
+  '/admin': AdminIndex,
   '/': ClientIndex,
-  'rezervacija': TermConfirmation,
+  '/potrditev': TermConfirmation,
 }
-
 export default {
   data() {
-	return {
-    currentPath: window.location.pathname
-	}
+    return {
+      currentPath: window.location.hash
+    }
   },
   computed: {
-	currentView() {
-    const rootPath = window.location.pathname.split('/')[1] || '/';
-    return routes[rootPath];
-	}
+    currentView() {
+      return routes[this.currentPath.slice(1) || '/'] || ClientIndex
+    }
   },
   mounted() {
-    console.log(this.currentPath, this.currentView);
+    window.addEventListener('hashchange', () => {
+      this.currentPath = window.location.hash
+    })
   }
 }
 </script>
+
 
 <template>
   <div class="app">

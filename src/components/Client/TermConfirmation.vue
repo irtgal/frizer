@@ -21,7 +21,7 @@
         </div>
         <div class="form-group mt-3">
             <label>Kontakt</label>
-            <h3>{{term.contact}} </h3>
+            <h3>{{term.contact || '/' }} </h3>
         </div>
     </div>
   </div>
@@ -34,6 +34,7 @@
 <script>
 import {backendUrl} from '../../config.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
+import State from '../../helpers/State.js';
 
 export default {
   name: 'ShowTerm',
@@ -46,15 +47,15 @@ export default {
   },
   methods: {
     termId() {
-      return window.location.pathname.split('/')[2];
+      return State.term?.id;
     },
     fetchTerm() {
       this.loading = true;
       this.axios.get(`${backendUrl}/client/terms/${this.termId()}`)
           .then((response) => {
               this.term = response.data;
-              this.loading = false;
-          });
+          })
+          .finally(() => {this.loading = false;});
     },
     fetchTypes() {
       this.axios.get(`${backendUrl}/client/types`)
@@ -75,10 +76,7 @@ export default {
     this.fetchTerm();
   },
   mounted() {
-    window.addEventListener('popstate', (e) => {
-      e.preventDefault();
-      alert('nazaj');
-    })
+    console.log(State);
   }
 }
 </script>

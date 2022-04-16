@@ -29,7 +29,11 @@
             </tr>
           </tbody>
         </table>
-        <h3 v-else class="text-center">Ni terminov</h3>
+        <template v-else>
+        <h3 class="text-center mt-5">Ni terminov</h3>
+        <i class="bi bi-emoji-frown text-center" style="font-size: 2em;"></i>
+        </template>
+
       </div>
 
     </template>
@@ -45,6 +49,7 @@
 
 import {backendUrl} from '../../config.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
+import State from '../../helpers/State.js';
 
 export default {
   name: 'AdminIndex',
@@ -107,6 +112,7 @@ export default {
 
       selectTerm(term) {
         this.selectedTerm = term;
+        State.setTerm(term);
       },
 
 
