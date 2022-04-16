@@ -1,6 +1,6 @@
 
 
-const backendUrl = 'http://localhost:8888/api';
+const backendUrl = 'https://narocanjefrizer.herokuapp.com/api';
 
 
 export { backendUrl }
