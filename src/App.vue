@@ -38,20 +38,6 @@ export default {
 .app {
   margin-top: 20px;
 }
-.shade {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgb(0,0,0,0.6);
-    height: 100vh;
-}
-.close-btn {
-    padding: 10px;
-    cursor: pointer;
-}
-
 
 /* TERMS */
 .terms {
@@ -64,7 +50,6 @@ export default {
 .terms table {
   text-align: center;
 }
-
 
 .term:hover {
   cursor: pointer;
@@ -107,8 +92,7 @@ export default {
   padding: 10px;
   white-space: nowrap;
 }
-.date.no-terms {
-}
+
 .date.selected {
   background: #000;
 }
@@ -134,7 +118,7 @@ export default {
 .day-date {
   font-size: 1.5em;
   font-weight: bold;
-  color: rgb(88,97,105);
+  color: rgb(78,87,95);
 }
 .selected .day-date {
   color: rgb(230,230,230) !important;
@@ -147,6 +131,25 @@ export default {
   color: rgba(220,220,220, 0.9);
 }
 
+
+/* MODALS */
+.shade {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(0,0,0,0.6);
+    height: 100vh;
+}
+.close-btn {
+    padding: 5px 10px 5px 15px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+
+/* UTILS */
 .spinner-container {
   display: flex;
   justify-content: center;

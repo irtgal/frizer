@@ -74,7 +74,7 @@ export default {
   name: 'ReserveTerm',
   props: {
     term: Object,
-    types: [],
+    types: Array,
     admin: Boolean,
   },
   data: function () {
@@ -135,13 +135,11 @@ export default {
                 this.cancel();
             })
       },
-      getType(typeId) {
-        console.log(typeId, this.types);
+      getType(typeId) {        
         return this.types.find((type) => type.id = typeId);
       },
       fullTermTime() {
-          console.log(dayName(this.term.date));
-          return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
+        return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
       }
   }
 }

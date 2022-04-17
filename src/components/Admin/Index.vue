@@ -16,7 +16,7 @@
       </div>
 
       <div class="dates container-fluid">
-        <i class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+        <i class="bi bi-caret-left-fill left" @click="navigate(-loadDaysNumber)"></i>
         <div v-for="date in orderedDates" :key="date" class="date" :class="{'selected': date === selectedDate, 'no-terms': !hasTerms(date)}" @click="selectDate(date); togglePopup('showTerm', true)">
           <span class="day-name">{{dayName(date)}}</span>
           <span class="day-date">{{formatDate(date)}}</span>
@@ -24,7 +24,7 @@
           <span class="day-status" v-else-if="hasTerms(date)">Prosto</span>
           <span class="day-status" v-else>Bl Bula</span>
         </div>
-        <i class="bi bi-caret-right-fill right" @click="goRight()"></i>
+        <i class="bi bi-caret-right-fill right" @click="navigate(loadDaysNumber)"></i>
       </div>
 
       <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
@@ -49,7 +49,9 @@
             </tr>
           </tbody>
         </table>
+
         <h3 v-else class="text-center">Ni terminov</h3>
+
       </div>
 
       <div class="container-fluid d-flex justify-content-center mt-3">
@@ -106,7 +108,7 @@ export default {
         this.axios.get(`${backendUrl}/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data;
-                console.log('Timetable: ',this.timetable);
+                
                 // select first available date
                 if (!this.selectedDate || !this.orderedDates.includes(this.selectedDate)) {
                   this.selectedDate = this.orderedDates[0];
@@ -124,15 +126,9 @@ export default {
             });
       },
 
-      goRight() {
+      navigate(numberOfDays) {
         const date = new Date(this.startDate);
-        date.setDate(date.getDate() + this.loadDaysNumber);  
-        this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        this.fetchTimetable();
-      },
-      goLeft() {
-        const date = new Date(this.startDate);
-        date.setDate(date.getDate() - this.loadDaysNumber);  
+        date.setDate(date.getDate() + numberOfDays);
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
         this.fetchTimetable();
       },

@@ -17,8 +17,9 @@
         </a>
       </div>
       <div class="dates container-fluid mt-4">
+        
         <!-- right icon -->
-        <i v-if="firstAvailableDate < orderedDates[0]" class="bi bi-caret-left-fill left" @click="goLeft()"></i>
+        <i v-if="firstAvailableDate < orderedDates[0]" class="bi bi-caret-left-fill left" @click="navigate(-loadDaysNumber)"></i>
         <i v-else class="bi bi-caret-left-fill left" style="visibility: hidden;"></i>
        
         <!-- dates -->
@@ -30,7 +31,7 @@
         </div>
 
         <!-- left icon -->
-        <i v-if="lastAvailableDate > orderedDates[orderedDates.length -1]" class="bi bi-caret-right-fill right" @click="goRight()"></i>
+        <i v-if="lastAvailableDate > orderedDates[orderedDates.length -1]" class="bi bi-caret-right-fill right" @click="navigate(loadDaysNumber)"></i>
         <i v-else class="bi bi-caret-right-fill left" style="visibility: hidden;"></i>
 
       </div>
@@ -58,6 +59,7 @@
       </div>
 
     </template>
+
     <div v-else-if="!loading" class="no-available-terms">
         <i class="bi bi-emoji-frown" style="font-size: 3em;"></i>     
         <h3 class="mt-2">Trenutno ni na voljo nobenih terminov</h3> 
@@ -134,28 +136,20 @@ export default {
             });
       },
 
-      goRight() {
+      navigate(numberOfDays) {
         const date = new Date(this.startDate);
-        date.setDate(date.getDate() + this.loadDaysNumber);  
+        date.setDate(date.getDate() + numberOfDays);
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
         this.fetchTimetable();
       },
-      goLeft() {
-        const date = new Date(this.startDate);
-        date.setDate(date.getDate() - this.loadDaysNumber);  
-        this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-        this.fetchTimetable();
-      },
-
       selectTerm(term) {
         this.selectedTerm = term;
         State.setTerm(term);
       },
-
-
       selectDate(date) {
         this.selectedDate = date;
       },
+
       hasTerms(date) {
         return this.timetable[date] && this.timetable[date].length !== 0;
       },
@@ -191,6 +185,10 @@ export default {
 #add-term:hover {
   font-size: 3em;
   color: rgb(100,100,100);
+}
+
+.no-terms * {
+  opacity: 0.7;
 }
 
 .no-available-terms {

@@ -1,8 +1,8 @@
 <template>
-  <div class="show-term" v-if="!loading && term && term.reserved">
+  <div class="show-term" v-if="!loading && term && term.reserved && types">
     <i class="bi bi-check-circle check"></i>
     <h1>Vse štima</h1>
-    <div v-if="term.reserved" class="details mt-5">
+    <div class="details mt-5">
         <div class="form-group">
             <label>Čas termina</label>
             <h3>{{fullTermTime()}} ob {{term.time}}</h3>
@@ -64,8 +64,7 @@ export default {
           });
     },
     getType(typeId) {
-      console.log(typeId, this.types);
-      return this.types.find((type) => type.id = typeId);
+      return this.types.find((type) => type.id === typeId);
     },
     fullTermTime() {
         return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
@@ -76,7 +75,7 @@ export default {
     this.fetchTerm();
   },
   mounted() {
-    console.log(State);
+    
   }
 }
 </script>

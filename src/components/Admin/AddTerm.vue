@@ -49,16 +49,16 @@ export default {
           this.$emit('cancel');
       },
       save() {
-        console.log(this.start, typeof this.end);
+        
         if (!this.start || !this.end) {
             this.error = "Manjkajo podatki"
             return;
         }
         let startMinutes = this.start.split(':')[1].trim();
         let endMinutes = this.start.split(':')[1].trim();
-        console.log(startMinutes, endMinutes);
+        
         if (startMinutes != '00' && startMinutes != '30') {
-          console.log('Start ni: ', startMinutes);
+          
           startMinutes = (parseInt(startMinutes) > 30) ? '00' : '30';
         }
         if (endMinutes != '00' && endMinutes != '30') {
@@ -68,8 +68,7 @@ export default {
         this.end = `${this.end.split(':')[0]}:${endMinutes}`;
 
         this.axios.post(`${backendUrl}/admin/terms`, {'start': this.start, 'end': this.end, 'date': this.date})
-            .then((response) => {
-                console.log('Response:', response);
+            .then(() => {                
                 this.$emit('saved');
                 this.cancel();
             });
