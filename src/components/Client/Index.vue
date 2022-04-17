@@ -217,6 +217,7 @@ export default {
   text-align: center;
   align-items: center;
   align-self: center;
+  margin: 0 10vw;
 }
 
 
