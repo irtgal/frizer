@@ -88,7 +88,7 @@ export default {
       types: [],
 
       allTimes: [],
-      loadDaysNumber: 4,
+      loadDaysNumber: 3,
 
       loading: true,
       firstLoad: true,
