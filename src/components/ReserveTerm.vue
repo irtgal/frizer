@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label >Kontakt</label>
-                <h3>{{term.contact}} </h3>
+                <h3>{{term.contact || '/'}} </h3>
             </div>
         </template>
         <template v-else>
