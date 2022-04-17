@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+
 class TermControllerClient extends Controller
 {
     /**
