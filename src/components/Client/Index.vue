@@ -87,7 +87,6 @@ export default {
       selectedDate: null,
       types: [],
 
-      allTimes: [],
       loadDaysNumber: 3,
 
       loading: true,
@@ -164,23 +163,6 @@ export default {
         let date = new Date();
         return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
       },
-
-      getAllTimes() {
-          let time =  '6:00';
-          let i =0;
-          while (time.split(':')[0] != '24' && i < 100) {
-              this.allTimes.push(time);
-              let newMinutes = "00";
-              if (time.split(':')[1] == "00") {
-                  newMinutes = "30";
-              }
-              let newHours = parseInt(time.split(':')[0]);
-              newHours = (newMinutes == "00") ?  newHours + 1 : newHours;
-              newHours = (newHours > 9) ? newHours : "0" + newHours;
-              time = `${newHours}:${newMinutes}`;
-              i ++;
-          }
-      },
       dayName(date) {
         return dayName(date);
       },
@@ -192,7 +174,6 @@ export default {
       }
   },
   created() {
-      this.getAllTimes();
       this.fetchTypes();
       this.fetchTimetable();
   },
