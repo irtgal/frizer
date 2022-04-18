@@ -1,13 +1,6 @@
 <template>
 
-  <!-- spinner -->
-  <div v-if="firstLoad" class="spinner-container">
-    <div class="spinner-border" role="status">
-      <span class="sr-only"></span>
-    </div>
-  </div>
-
-  <div v-else class="admin">
+  <div class="admin">
 
     <template v-if="!loading && firstAvailableDate">
 
@@ -92,7 +85,6 @@ export default {
       loadDaysNumber: 3,
 
       loading: true,
-      firstLoad: true,
 
       selectedTerm: null,
     }
@@ -126,7 +118,6 @@ export default {
             })
             .finally(() => {
               this.loading = false;
-              this.firstLoad = false;
             });
       },
       fetchTypes() {

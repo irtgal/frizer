@@ -12,7 +12,10 @@ const routes = {
 export default {
   data() {
     return {
-      currentPath: window.location.hash
+      currentPath: window.location.hash,
+
+      firstLoad: true,
+      showOneMoment: false,
     }
   },
   computed: {
@@ -20,17 +23,45 @@ export default {
       return routes[this.currentPath.slice(1) || '/'] || ClientIndex
     }
   },
+  created() {
+    this.axios.interceptors.request.use(function (config) {
+        console.log('Posiljam request:', config);
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+
+    // Add a response interceptor
+    this.axios.interceptors.response.use((response) => {
+        this.firstLoad = false;
+        return response;
+      }, function (error) {
+        return Promise.reject(error);
+      });
+  },
   mounted() {
     window.addEventListener('hashchange', () => {
       this.currentPath = window.location.hash
-    })
+    });
+
+    setTimeout(() => {this.showOneMoment = true}, 3000);
   }
 }
 </script>
 
 
 <template>
-  <div class="app">
+
+  <!-- spinner -->
+  <div v-if="firstLoad" class="spinner-container">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+    <h4 class="mt-3" v-if="showOneMoment">Še čisto malo</h4>
+  </div>
+
+  <div v-show="!firstLoad" class="app">
     <component :is="currentView" />
   </div>
 </template>
@@ -151,8 +182,8 @@ export default {
 
 /* UTILS */
 .spinner-container {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  justify-items: center;
   align-content: center;
   align-items: center;
   position: absolute;

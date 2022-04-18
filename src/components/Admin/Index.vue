@@ -1,12 +1,5 @@
 <template>
-  <!-- spinner -->
-  <div v-if="firstLoad" class="spinner-container">
-    <div class="spinner-border" role="status">
-      <span class="sr-only"></span>
-    </div>
-  </div>
-
-  <div v-else class="admin">
+  <div class="admin">
 
     <template v-if="!loading">
       <div class="text-center mb-3">
@@ -84,7 +77,6 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
-      firstLoad: true,
 
       selectedTerm: null,
       visible: {
@@ -115,9 +107,6 @@ export default {
                 }
                 this.loading = false;
             })
-            .finally(() => {
-              this.firstLoad = false;
-            });
       },
       fetchTypes() {
         this.axios.get(`${backendUrl}/client/types`)
