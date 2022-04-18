@@ -53,7 +53,7 @@ export default {
 
 <template>
 
-  <!-- spinner -->
+  <!-- spinner on first load -->
   <div v-if="firstLoad" class="spinner-container">
     <div class="spinner-border" role="status">
       <span class="sr-only"></span>
@@ -61,9 +61,11 @@ export default {
     <h4 class="mt-3" v-if="showOneMoment">Še čisto malo</h4>
   </div>
 
+  <!-- component view -->
   <div v-show="!firstLoad" class="app">
     <component :is="currentView" />
   </div>
+
 </template>
 <style>
 .app {
