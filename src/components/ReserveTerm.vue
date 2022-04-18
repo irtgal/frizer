@@ -27,6 +27,7 @@
                 <h3>{{term.contact || '/'}} </h3>
             </div>
         </template>
+
         <template v-else>
             <div class="form-group mt-3">
                 <label >Ime</label>
@@ -48,6 +49,7 @@
 
       </div>
       <div class="modal-footer justify-content-between">
+
         <template v-if="admin">
           <button  @click="remove" type="button" class="btn btn-danger"  data-dismiss="modal">Odstrani</button>
           <button v-if="term.reserved" @click="clearTerm" type="button" class="btn btn-secondary" data-dismiss="modal">Počisti rezervacijo</button>
@@ -145,6 +147,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

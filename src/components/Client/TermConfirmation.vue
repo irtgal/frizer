@@ -27,7 +27,7 @@
   </div>
   <div v-else-if="!loading" class="show-term">
     <i class="bi bi-x-circle-fill check"></i>
-    <h1>Nekej ni ok</h1>    
+    <h1>Nekej ne štima</h1>
   </div>
 </template>
 
@@ -74,9 +74,7 @@ export default {
     this.fetchTypes();
     this.fetchTerm();
   },
-  mounted() {
-    
-  }
+  
 }
 </script>
 

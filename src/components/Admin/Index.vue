@@ -129,7 +129,6 @@ export default {
         this.visible[name] = visible;
       },
 
-
       selectDate(date) {
         this.selectedDate = date;
       },
@@ -169,7 +168,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-
 #add-term {
   font-size: 3em;
   cursor: pointer;
@@ -178,9 +176,6 @@ export default {
   font-size: 3em;
   color: rgb(100,100,100);
 }
-
-
-
 
 
 </style>

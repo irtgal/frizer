@@ -58,7 +58,7 @@ export default {
     <div class="spinner-border" role="status">
       <span class="sr-only"></span>
     </div>
-    <h4 class="mt-3" v-if="showOneMoment">Še čisto malo</h4>
+    <h4 class="mt-3" v-if="showOneMoment">Še čist mal</h4>
   </div>
 
   <!-- component view -->
