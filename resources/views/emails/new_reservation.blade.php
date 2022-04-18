@@ -4,5 +4,4 @@
 <p>Storitev: <strong>{{ $type_name }}</strong></p>
 <p>Kontakt: <strong>{{ $contact }}</strong></p>
 <br>
-<br>
-<small>Rezervirano ob {{date('h:i d.m.Y')}}</small>
+<small>Rezervirano {{date('d.m.Y')}} ob {{date('h:i')}}</small>
