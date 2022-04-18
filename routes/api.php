@@ -25,5 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // ADMIN
 Route::apiResource('/admin/terms', TermControllerAdmin::class);
+Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
+// zankrat se ne uporablja
+Route::post('/admin/terms/clear', [TermControllerAdmin::class, 'clearMany']);
+
+// client
 Route::apiResource('/client/terms', TermControllerClient::class);
 Route::get('/client/types', [TermControllerClient::class, 'types']);

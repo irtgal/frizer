@@ -83,6 +83,26 @@ class TermControllerAdmin extends Controller
         //
     }
 
+    public function deleteMany(Request $request)
+    {
+        $ids = $request['ids'];
+        foreach ($ids as $id) {
+            $term = Term::findOrFail($id);
+            $term->delete();
+        }
+        return true;
+    }
+
+    public function clearMany(Request $request)
+    {
+        $ids = $request['ids'];
+        foreach ($ids as $id) {
+            $term = Term::findOrFail($id);
+            $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
+        }
+        return true;
+    }
+
     /**
      * Remove the specified resource from storage.
      *

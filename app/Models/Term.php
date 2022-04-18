@@ -24,4 +24,9 @@ class Term extends Model
         return Carbon::parse($this->full_time)->format('H:i');
     }
 
+    public function service_type()
+    {
+        return $this->belongsTo(Type::class, 'type');
+    }
+
 }

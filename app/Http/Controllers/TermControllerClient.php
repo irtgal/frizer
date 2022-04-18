@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Term;
 use App\Models\Type;
 use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewReservation;
 
 
 class TermControllerClient extends Controller
@@ -68,7 +71,11 @@ class TermControllerClient extends Controller
             if ($term->reserved) {
                 return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
             }
+
             $term->update(['reserved'=> true, 'name' => $request['name'], 'type'=> $request['type'],'contact'=> $request['contact']]);
+
+            Mail::to("gal.irt.01@gmail.com")->queue(new NewReservation($term));
+
         } else {
             $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
         }
