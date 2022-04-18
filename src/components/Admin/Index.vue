@@ -22,22 +22,32 @@
 
       <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
 
-      <div class="terms container-fluid">
+      <div class="options" v-if="checkedTermIds.length > 0">
+        <button type="button" class="btn btn-danger" @click="deleteChecked()"><i class="bi bi-trash trash m-1">Odstrani</i></button>
+      </div>
+
+      <div class="terms container-fluid mt-3">
         <table class="table table-hover" v-if="timetable[selectedDate] && timetable[selectedDate].length != 0">
           <thead>
             <tr>
+              <th>
+                <input class="form-check-input" type="checkbox" :checked="checkedTermIds.length == timetable[selectedDate].length" @click="checkAll()">
+              </th>
               <th>Čas</th>
               <th>Rezerviral</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="term in timetable[selectedDate]" :key="term.time" class="term" :class="{'reserved': term.reserved}"  @click="selectTerm(term)">
-              <td class="term-time">{{term.time}}</td>
+            <tr v-for="term in timetable[selectedDate]" :key="term.time" class="term" :class="{'reserved': term.reserved}">
+              <td> 
+                <input class="form-check-input" type="checkbox" :value="term.id" v-model="checkedTermIds">
+              </td>
+              <td class="term-time" @click="selectTerm(term)">{{term.time}}</td>
               <template v-if="term.reserved">
-                <td v-if="term.reserved">{{term.name}}</td>
+                <td v-if="term.reserved"  @click="selectTerm(term)">{{term.name}}</td>
               </template>
               <template v-else>
-                <td></td>
+                <td @click="selectTerm(term)"></td>
               </template>
             </tr>
           </tbody>
@@ -77,6 +87,8 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
+
+      checkedTermIds: [],
 
       selectedTerm: null,
       visible: {
@@ -120,6 +132,28 @@ export default {
         date.setDate(date.getDate() + numberOfDays);
         this.startDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
         this.fetchTimetable();
+      },
+
+      checkAll() {
+        const allIds = this.timetable[this.selectedDate].map((term) => term.id);
+        if (allIds.every((id) => this.checkedTermIds.includes(id))) {
+          this.checkedTermIds = [];
+        } else {
+          this.checkedTermIds = allIds;
+        }
+      },
+
+      deleteChecked() {
+        if (this.checkedTermIds.length === 0) {
+          return;
+        }
+        this.axios.post(`${backendUrl}/admin/terms/delete`, {
+          'ids': this.checkedTermIds,
+        })
+        .then(() => {
+          this.fetchTimetable();
+          this.checkedTermIds = [];
+          });
       },
 
       selectTerm(term) {
@@ -176,6 +210,14 @@ export default {
   font-size: 3em;
   color: rgb(100,100,100);
 }
+
+.options {
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: space-evenly;
+}
+
 
 
 </style>
