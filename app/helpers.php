@@ -1,24 +1,44 @@
 <?php
 
 use Illuminate\Support\Facades\Mail;
-use App\Mail\NewReservation;
+use App\Mail\MailClass;
 use Carbon\Carbon;
 
 if (!function_exists('send_mail_new_reservation')){
     function send_mail_new_reservation($term) {
-        $to_name = "Urban Fujan";
-        $to_email = "gal.irt.01@gmail.com";
-        $pretty_time = day_of_week($term->full_time) . ", ".  $term->date . " ob " . $term->time;
-        $type_name = $term->service_type->name;
-        $data = array("name" => $term->name, "pretty_time" => $pretty_time, "type_name" => $type_name);
-        Mail::send('emails.confirm', $data, function($message) use ($to_name, $to_email, $term) {
-        $message->to($to_email, $to_name)
-        ->subject("Nova rezervacija - " . $term->name);
-        });
+        $subject = "Nova rezervacija - " . $term->name;
+        Mail::to("gal.irt.01@gmail.com")->queue(new MailClass($term, "new_reservation", $subject));
     }
-
 }
 
+if (!function_exists('send_mail_confirmation')){
+    function send_mail_confirmation($term) {
+        if (!is_valid_email($term->contact)) {
+            return;
+        }
+        $subject = "Potrditev rezervacije - " . $term->service_type->name;
+        Mail::to($term->contact)->queue(new MailClass($term, "reservation_confirm", $subject));
+    }
+}
+
+if (!function_exists('send_mail_cancellation')){
+    function send_mail_cancellation($term) {
+        if (!is_valid_email($term->contact)) {
+            return;
+        }
+        $subject = "Preklic rezervacije - " . $term->service_type->name;
+        Mail::to($term->contact)->queue(new MailClass($term, "reservation_cancel", $subject));
+    }
+}
+
+if (!function_exists('is_valid_email')){
+    function is_valid_email($email) {
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }
+        return false;
+    }
+}
 if (!function_exists('day_of_week')){
     function day_of_week($date) {
         $weekMap = [

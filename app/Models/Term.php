@@ -14,6 +14,16 @@ class Term extends Model
     protected $fillable = ['full_time', 'name', 'type', 'contact', 'reserved'];
     protected $appends = ['date', 'time'];
 
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function($term) {
+            if ($term->reserved) {
+                send_mail_cancellation($term);
+            }
+  
+        });
+    }
+
 
  
     public function getDateAttribute() {

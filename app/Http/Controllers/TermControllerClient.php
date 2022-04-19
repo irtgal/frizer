@@ -9,7 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\NewReservation;
+use App\Mail\MailClass;
 
 
 class TermControllerClient extends Controller
@@ -74,9 +74,13 @@ class TermControllerClient extends Controller
 
             $term->update(['reserved'=> true, 'name' => $request['name'], 'type'=> $request['type'],'contact'=> $request['contact']]);
 
-            Mail::to("gal.irt.01@gmail.com")->queue(new NewReservation($term));
+            send_mail_new_reservation($term);
+            send_mail_confirmation($term);
 
         } else {
+            if ($term->reserved) {
+                send_mail_cancellation($term);
+            }
             $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
         }
         return $term;
