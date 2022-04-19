@@ -1,16 +1,17 @@
 <div style="width: 100%; display: grid; text-align: center; background: #F93154; color: white; padding: 20px 0px; font-family: Arial, sans-serif;">
-<h1 style="margin-bottom:10px;">Preklic rezervacije</h1>
-<p style="margin-top: 0px;">Gospod frizer je odpovedal vašo rezervacijo</p>
-<span>Termin</span>
-<h3 style="margin-top: 0px;">{{ $pretty_time }}</h3>
+<h1 style="margin-bottom:5px; color: white;">Preklic rezervacije</h1>
+<p style="margin-top: 0px; color: white">Gospod frizer je odpovedal Vašo rezervacijo</p>
 
-<span>Rezerviral</span>
-<h3 style="margin-top: 0px;">{{ $name }}</h3>
+<div style="color:rgb(210,210,210)">Termin</div>
+<h3 style="margin-top: 0px;color: white;">{{ $pretty_time }}</h3>
 
-<span>Storitev</span>
-<h3 style="margin-top: 0px;">{{ $type_name }}</h3>
+<div style="color:rgb(210,210,210)">Rezerviral</div>
+<h3 style="margin-top: 0px;color: white;">{{ $name }}</h3>
 
-<span>Cena</span>
-<h3 style="margin-top: 0px;">{{ $type_price }}€</h3>
+<div style="color:rgb(210,210,210)">Storitev</div>
+<h3 style="margin-top: 0px;color: white;">{{ $type_name }}</h3>
+
+<div style="color:rgb(210,210,210)">Cena</div>
+<h3 style="margin-top: 0px;color: white;">{{ $type_price }}€</h3>
 
 </div>

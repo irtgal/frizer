@@ -1,19 +1,21 @@
 <div style="width: 100%; display: grid; text-align: center; background: rgb(210,210,210);padding: 20px 0px; font-family: Arial, sans-serif;">
-<h1>Nova rezervacija</h1>
-<span>Termin</span>
-<h3 style="margin-top: 0px;">{{ $pretty_time }}</h3>
 
-<span>Rezerviral</span>
-<h3 style="margin-top: 0px;">{{ $name }}</h3>
+<h1 style="color: black">Nova rezervacija</h1>
 
-<span>Storitev</span>
-<h3 style="margin-top: 0px;">{{ $type_name }}</h3>
+<div style="color: black;">Termin</div>
+<h3 style="margin-top: 0px;color: black;">{{ $pretty_time }}</h3>
 
-<span>Cena</span>
-<h3 style="margin-top: 0px;">{{ $type_price }}€</h3>
+<div style="color: black;">Rezerviral</div>
+<h3 style="margin-top: 0px;color: black;">{{ $name }}</h3>
 
-<span>Email</span>
-<h3 style="margin-top: 0px;">{{ $contact }}</h3>
+<div style="color: black;">Storitev</div>
+<h3 style="margin-top: 0px;color: black;">{{ $type_name }}</h3>
+
+<div style="">Cena</div>
+<h3 style="margin-top: 0px;color: black;">{{ $type_price }}€</h3>
+
+<div style="color: black;">Email</div>
+<h3 style="margin-top: 0px;color: black;">{{ $contact }}</h3>
 
 <br>
 <small>Rezervirano {{date('d.m.Y')}} ob {{date('h:i')}}</small>
