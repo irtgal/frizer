@@ -100,7 +100,8 @@ export default {
           this.error = 'Ime in tip storitve sta obvezna';
           return;
         }
-        this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
+        const endpoint = this.admin ? 'admin' : 'client';
+        this.axios.patch(`${backendUrl}/${endpoint}/terms/${this.term.id}`, {
           'reserved': true,
           'name': this.name,
           'contact': this.contact,
