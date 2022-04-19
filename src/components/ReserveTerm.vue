@@ -42,6 +42,9 @@
             <div class="form-group mt-3">
                 <label >Email</label>
                 <input type="email" class="form-control" v-model="contact" />
+                <small class="form-text text-muted">
+                  Na mail boste obveščeni o morebitnih spremembah rezervacije
+                </small>
             </div>
             <p v-if="error" class="text-danger my-1 text-center">{{error}}</p>
 
@@ -53,11 +56,11 @@
         <template v-if="admin">
           <button  @click="remove" type="button" class="btn btn-danger"  data-dismiss="modal">Odstrani</button>
           <button v-if="term.reserved" @click="clearTerm" type="button" class="btn btn-secondary" data-dismiss="modal">Počisti rezervacijo</button>
-          <button @click="save" type="button" class="btn btn-dark">Shrani</button>
+          <button @click="saveAdmin" type="button" class="btn btn-dark">Shrani</button>
         </template>
 
         <template v-else>
-          <button @click="save" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>          
+          <button @click="saveClient" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>          
         </template>
 
       </div>
@@ -87,21 +90,27 @@ export default {
         error: '',
     }
   },
+  mounted() {
+    if (!this.admin) {
+      this.contact = localStorage.getItem('email') || "";
+    }
+  },
   methods: {
       cancel() {
           this.$emit('cancel');
       },
-      save() {
-        if (this.term.reserved) {
-          this.cancel();
+      saveClient() {
+        this.error = '';
+        if (!this.name.trim() || !this.typeId || !this.contact) {
+          this.error = 'Manjkajo podatki';
           return;
         }
-        if (!this.name.trim() || !this.typeId) {
-          this.error = 'Ime in tip storitve sta obvezna';
+        if (!this.validateEmail(this.contact)) {
+          this.error = 'Vnesite pravilen email naslov';
           return;
         }
-        const endpoint = this.admin ? 'admin' : 'client';
-        this.axios.patch(`${backendUrl}/${endpoint}/terms/${this.term.id}`, {
+        
+        this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
           'reserved': true,
           'name': this.name,
           'contact': this.contact,
@@ -113,17 +122,44 @@ export default {
               this.$emit('saved');
               return;
             }
-            if (this.admin) {
+            localStorage.setItem('email', this.contact);
+            window.location.hash = `/potrditev`;
+          });
+
+      },
+      saveAdmin() {
+        if (this.term.reserved) {
+          this.cancel();
+          return;
+        }
+        this.error = '';
+        if (!this.name.trim() || !this.typeId) {
+          this.error = 'Manjkajo podatki';
+          return;
+        }
+        if (this.contact && !this.validateEmail(this.contact)) {
+          this.error = 'Vnesite pravilen email naslov';
+          return;
+        }
+        this.axios.patch(`${backendUrl}/admin/terms/${this.term.id}`, {
+          'reserved': true,
+          'name': this.name,
+          'contact': this.contact,
+          'type': this.typeId,
+        })
+          .then((response) => {
+            if (response.data.error) {
+              this.error = response.data.error;
               this.$emit('saved');
-              this.cancel();
               return;
             }
-            window.location.hash = `/potrditev`;
+            this.$emit('saved');
+            this.cancel();
           })
 
       },
       clearTerm() {
-        this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
+        this.axios.patch(`${backendUrl}/admin/terms/${this.term.id}`, {
           'reserved': false,
         })
         .then(() => {
@@ -143,7 +179,14 @@ export default {
       },
       fullTermTime() {
         return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
-      }
+      },
+      validateEmail(email){
+        return String(email).toLowerCase()
+          .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+      },
+
   }
 }
 </script>
