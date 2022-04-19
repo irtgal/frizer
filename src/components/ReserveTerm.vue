@@ -62,7 +62,7 @@
         <template v-else>
           <button v-if="!sendingData" @click="saveClient" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>
           
-          <button v-else type="button" class="btn btn-dark btn-lg w-100 flex-centered">
+          <button v-else type="button" class="btn btn-dark btn-lg w-100">
             <div class="spinner-border" role="status">
               <span class="sr-only"></span>
             </div>
