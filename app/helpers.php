@@ -13,21 +13,19 @@ if (!function_exists('send_mail_new_reservation')){
 
 if (!function_exists('send_mail_confirmation')){
     function send_mail_confirmation($term) {
-        if (!is_valid_email($term->contact)) {
-            return;
+        if (is_valid_email($term->contact)) {
+            $subject = "Potrditev rezervacije - " . $term->service_type->name;
+            Mail::to($term->contact)->queue(new MailClass($term, "reservation_confirm", $subject));
         }
-        $subject = "Potrditev rezervacije - " . $term->service_type->name;
-        Mail::to($term->contact)->queue(new MailClass($term, "reservation_confirm", $subject));
     }
 }
 
 if (!function_exists('send_mail_cancellation')){
     function send_mail_cancellation($term) {
-        if (!is_valid_email($term->contact)) {
-            return;
+        if (is_valid_email($term->contact)) {
+            $subject = "Preklic rezervacije - " . $term->service_type->name;
+            Mail::to($term->contact)->queue(new MailClass($term, "reservation_cancel", $subject));
         }
-        $subject = "Preklic rezervacije - " . $term->service_type->name;
-        Mail::to($term->contact)->queue(new MailClass($term, "reservation_cancel", $subject));
     }
 }
 
