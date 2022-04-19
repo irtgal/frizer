@@ -60,7 +60,14 @@
         </template>
 
         <template v-else>
-          <button @click="saveClient" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>          
+          <button v-if="!sendingData" @click="saveClient" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>
+          
+          <button v-else type="button" class="btn btn-dark btn-lg w-100 flex-centered">
+            <div class="spinner-border" role="status">
+              <span class="sr-only"></span>
+            </div>
+          </button>
+
         </template>
 
       </div>
@@ -88,6 +95,7 @@ export default {
         contact: '',
         typeId: 0,
         error: '',
+        sendingData: false,
     }
   },
   mounted() {
@@ -109,7 +117,7 @@ export default {
           this.error = 'Vnesite pravilen email naslov';
           return;
         }
-        
+        this.sendingData = true;
         this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
           'reserved': true,
           'name': this.name,

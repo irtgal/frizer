@@ -199,4 +199,10 @@ td {
   vertical-align: middle;
 }
 
+.flex-centered {
+  display: flex;
+  justify-items: center;
+  align-content: center;
+}
+
 </style>
