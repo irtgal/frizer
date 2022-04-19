@@ -20,7 +20,7 @@
             <h3>{{getType(term.type).price}}€</h3>
         </div>
         <div class="form-group mt-3">
-            <label>Kontakt</label>
+            <label>Email</label>
             <h3>{{term.contact || '/' }} </h3>
         </div>
     </div>

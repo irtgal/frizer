@@ -40,8 +40,8 @@
               </select>
             </div>
             <div class="form-group mt-3">
-                <label >Kontakt</label>
-                <input type="text" class="form-control" v-model="contact" />
+                <label >Email</label>
+                <input type="email" class="form-control" v-model="contact" />
             </div>
             <p v-if="error" class="text-danger my-1 text-center">{{error}}</p>
 
