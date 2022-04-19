@@ -1,4 +1,4 @@
-<div style="width: 100%; display: grid; text-align: center; background: rgb(210,210,210);padding: 0px 20px; font-family: Arial, sans-serif;">
+<div style="width: 100%; display: grid; text-align: center; background: rgb(210,210,210);padding: 20px 0px; font-family: Arial, sans-serif;">
 <h1>Potrditev rezervacije</h1>
 <span>Termin</span>
 <h3 style="margin-top: 0px;">{{ $pretty_time }}</h3>

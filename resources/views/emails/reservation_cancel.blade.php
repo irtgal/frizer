@@ -1,5 +1,5 @@
-<div style="width: 100%; display: grid; text-align: center; background: #F93154; padding: 0px 20px; font-family: Arial, sans-serif;">
-<h1>Preklic rezervacije</h1>
+<div style="width: 100%; display: grid; text-align: center; background: #F93154; color: white; padding: 20px 0px; font-family: Arial, sans-serif;">
+<h1 style="margin-bottom:10px;">Preklic rezervacije</h1>
 <p style="margin-top: 0px;">Gospod frizer je odpovedal vašo rezervacijo</p>
 <span>Termin</span>
 <h3 style="margin-top: 0px;">{{ $pretty_time }}</h3>
