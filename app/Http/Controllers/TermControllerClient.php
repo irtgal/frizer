@@ -76,14 +76,9 @@ class TermControllerClient extends Controller
 
             send_mail_new_reservation($term);
             send_mail_confirmation($term);
-
-        } else {
-            if ($term->reserved) {
-                send_mail_cancellation($term);
-            }
-            $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
+            return $term;
         }
-        return $term;
+        return false;
     }
 
     public function show(Request $request, $id)

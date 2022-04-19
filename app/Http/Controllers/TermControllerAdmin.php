@@ -78,9 +78,25 @@ class TermControllerAdmin extends Controller
      * @param  \App\Models\Term  $term
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Term $term)
+    public function update(Request $request, $id)
     {
-        //
+        $term = Term::findOrFail($id);
+        if ($request['reserved'] && $request['name'] && $request['type']) {
+            if ($term->reserved) {
+                return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
+            }
+
+            $term->update(['reserved'=> true, 'name' => $request['name'], 'type'=> $request['type'],'contact'=> $request['contact']]);
+
+            send_mail_confirmation($term);
+
+        } else {
+            if ($term->reserved) {
+                send_mail_cancellation($term);
+            }
+            $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
+        }
+        return $term;
     }
 
     public function deleteMany(Request $request)
