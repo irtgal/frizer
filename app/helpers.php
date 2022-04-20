@@ -7,7 +7,7 @@ use Carbon\Carbon;
 if (!function_exists('send_mail_new_reservation')){
     function send_mail_new_reservation($term) {
         $subject = "Nova rezervacija - " . $term->name;
-        Mail::to("gal.irt.01@gmail.com")->queue(new MailClass($term, "new_reservation", $subject));
+        Mail::to("urban.fujan2@gmail.com")->queue(new MailClass($term, "new_reservation", $subject));
     }
 }
 
