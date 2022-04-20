@@ -1,14 +1,19 @@
 <script>
+import AdminLogin from './components/Admin/Login.vue';
 import AdminIndex from './components/Admin/Index.vue';
 import ClientIndex from './components/Client/Index.vue';
 import TermConfirmation from './components/Client/TermConfirmation.vue';
 
 const routes = {
-  
+  '/login': AdminLogin,
   '/admin': AdminIndex,
+
   '/': ClientIndex,
   '/potrditev': TermConfirmation,
 }
+
+const noSpinner = [AdminIndex];
+
 export default {
   data() {
     return {
@@ -21,18 +26,12 @@ export default {
   computed: {
     currentView() {
       return routes[this.currentPath.slice(1) || '/'] || ClientIndex
+    },
+    showSpinner() {
+      return (noSpinner.indexOf(this.currentView) != -1) && this.firstLoad;
     }
   },
   created() {
-    this.axios.interceptors.request.use(function (config) {
-        console.log('Posiljam request:', config);
-        return config;
-      }, function (error) {
-        // Do something with request error
-        return Promise.reject(error);
-      });
-
-    // Add a response interceptor
     this.axios.interceptors.response.use((response) => {
         this.firstLoad = false;
         return response;
@@ -54,7 +53,7 @@ export default {
 <template>
 
   <!-- spinner on first load -->
-  <div v-if="firstLoad" class="spinner-container">
+  <div v-if="showSpinner" class="spinner-container">
     <div class="spinner-border" role="status">
       <span class="sr-only"></span>
     </div>
@@ -62,7 +61,7 @@ export default {
   </div>
 
   <!-- component view -->
-  <div v-show="!firstLoad" class="app">
+  <div v-show="!showSpinner" class="app">
     <component :is="currentView" />
   </div>
 

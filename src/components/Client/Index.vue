@@ -71,7 +71,7 @@ import {backendUrl} from '../../config.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
 
 export default {
-  name: 'AdminIndex',
+  name: 'ClientIndex',
   data: function () {
     return {
       timetable: [],
