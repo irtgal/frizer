@@ -42,9 +42,6 @@
             <div class="form-group mt-3">
                 <label >Email</label>
                 <input type="email" class="form-control" v-model="contact" />
-                <small class="form-text text-muted">
-                  Na mail boste obveščeni o morebitnih spremembah rezervacije
-                </small>
             </div>
             <p v-if="error" class="text-danger my-1 text-center">{{error}}</p>
 
@@ -113,7 +110,7 @@ export default {
           this.error = 'Manjkajo podatki';
           return;
         }
-        if (!this.validateEmail(this.contact)) {
+        if (!this.isValidEmail(this.contact)) {
           this.error = 'Vnesite pravilen email naslov';
           return;
         }
@@ -142,10 +139,10 @@ export default {
         }
         this.error = '';
         if (!this.name.trim() || !this.typeId) {
-          this.error = 'Manjkajo podatki';
+          this.error = 'Izpolnite vsa polja';
           return;
         }
-        if (this.contact && !this.validateEmail(this.contact)) {
+        if (this.contact && !this.isValidEmail(this.contact)) {
           this.error = 'Vnesite pravilen email naslov';
           return;
         }
@@ -188,7 +185,7 @@ export default {
       fullTermTime() {
         return `${dayName(this.term.date)}, ${formatDate(this.term.date)}`;
       },
-      validateEmail(email){
+      isValidEmail(email){
         return String(email).toLowerCase()
           .match(
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

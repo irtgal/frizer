@@ -23,7 +23,12 @@
       <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
 
       <div class="options" v-if="checkedTermIds.length > 0">
-        <button type="button" class="btn btn-danger" @click="deleteChecked()"><i class="bi bi-trash trash m-1">Odstrani</i></button>
+        <button v-if="!deleteLoading" type="button" class="btn btn-danger" @click="deleteChecked()"><i class="bi bi-trash trash m-1">Odstrani</i></button>
+        <button v-else type="button" class="btn btn-danger">
+          <div class="spinner-border" role="status" style="width: 1.2rem; height: 1.2rem">
+            <span class="sr-only"></span>
+          </div>
+        </button>
       </div>
 
       <div class="terms container-fluid mt-3">
@@ -87,6 +92,7 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
+      deleteLoading: false,
 
       checkedTermIds: [],
 
@@ -147,6 +153,7 @@ export default {
         if (this.checkedTermIds.length === 0) {
           return;
         }
+        this.deleteLoading = true;
         this.axios.post(`${backendUrl}/admin/terms/delete`, {
           'ids': this.checkedTermIds,
         })
