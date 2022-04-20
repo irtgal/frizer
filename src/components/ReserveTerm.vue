@@ -59,7 +59,7 @@
         <template v-else>
           <button v-if="!sendingData" @click="saveClient" type="button" class="btn btn-dark btn-lg w-100">Rezerviraj</button>
           
-          <button v-else type="button" class="btn btn-dark btn-lg w-100">
+          <button v-else type="button" class="btn btn-dark btn-lg w-100 flex-centered">
             <div class="spinner-border" role="status">
               <span class="sr-only"></span>
             </div>
@@ -78,6 +78,7 @@
 
 import {backendUrl} from '../config.js';
 import {dayName, formatDate} from '../helpers/functions.js';
+import State from '../helpers/State.js';
 
 export default {
   name: 'ReserveTerm',
@@ -128,6 +129,7 @@ export default {
               return;
             }
             localStorage.setItem('email', this.contact);
+            State.setTerm(this.term);
             window.location.hash = `/potrditev`;
           });
 

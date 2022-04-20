@@ -69,7 +69,6 @@
 
 import {backendUrl} from '../../config.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
-import State from '../../helpers/State.js';
 
 export default {
   name: 'AdminIndex',
@@ -135,7 +134,6 @@ export default {
       },
       selectTerm(term) {
         this.selectedTerm = term;
-        State.setTerm(term);
       },
       selectDate(date) {
         this.selectedDate = date;

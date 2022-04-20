@@ -22,9 +22,10 @@
 
       <h5 class="text-center mt-3">{{dayName(this.selectedDate)}} {{formatDate(this.selectedDate)}}</h5>
 
+      <!-- delete button -->
       <div class="options" v-if="checkedTermIds.length > 0">
         <button v-if="!deleteLoading" type="button" class="btn btn-danger" @click="deleteChecked()"><i class="bi bi-trash trash m-1">Odstrani</i></button>
-        <button v-else type="button" class="btn btn-danger">
+        <button v-else type="button" class="btn btn-danger flex-centered">
           <div class="spinner-border" role="status" style="width: 1.2rem; height: 1.2rem">
             <span class="sr-only"></span>
           </div>

@@ -200,9 +200,9 @@ td {
 }
 
 .flex-centered {
-  display: flex;
-  justify-items: center;
-  align-content: center;
+  display: flex !important;
+  justify-content: center !important;
+  align-content: center !important;
 }
 
 </style>
