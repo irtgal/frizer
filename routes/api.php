@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\TermControllerAdmin;
 use App\Http\Controllers\TermControllerClient;
 
@@ -18,14 +19,18 @@ use App\Http\Controllers\TermControllerClient;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+// AUTH
+Route::post('/admin/register', [AuthenticationController::class, 'register']);
+Route::post('/admin/login', [AuthenticationController::class, 'login']);
 
 
 // ADMIN
-Route::apiResource('/admin/terms', TermControllerAdmin::class);
-Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource('/admin/terms', TermControllerAdmin::class);
+    Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
+});
+
 // zankrat se ne uporablja
 Route::post('/admin/terms/clear', [TermControllerAdmin::class, 'clearMany']);
 
