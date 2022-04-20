@@ -24,7 +24,7 @@
     <h3 style="margin-top: 0px;color: black;">{{ $contact }}</h3>
 
     <br>
-    <small>Rezervirano {{date('d.m.Y')}} ob {{date('h:i')}}</small>
+    <small>Rezervirano {{date('d.m.Y')}} ob {{date('H:i')}}</small>
     </div>
 
 </body>
