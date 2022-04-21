@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {backendUrl} from '../../config.js';
+import axios from '../../helpers/axios.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
 import State from '../../helpers/State.js';
 
@@ -51,14 +51,14 @@ export default {
     },
     fetchTerm() {
       this.loading = true;
-      this.axios.get(`${backendUrl}/client/terms/${this.termId()}`)
+      axios.get(`/client/terms/${this.termId()}`)
           .then((response) => {
               this.term = response.data;
           })
           .finally(() => {this.loading = false;});
     },
     fetchTypes() {
-      this.axios.get(`${backendUrl}/client/types`)
+      axios.get(`/client/types`)
           .then((response) => {
               this.types = response.data;
           });

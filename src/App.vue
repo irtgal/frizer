@@ -4,47 +4,33 @@ import AdminIndex from './components/Admin/Index.vue';
 import ClientIndex from './components/Client/Index.vue';
 import TermConfirmation from './components/Client/TermConfirmation.vue';
 
+
 const routes = {
-  '/login': AdminLogin,
+  '/prijava': AdminLogin,
   '/admin': AdminIndex,
 
   '/': ClientIndex,
   '/potrditev': TermConfirmation,
 }
 
-const noSpinner = [AdminIndex];
-
 export default {
   data() {
     return {
       currentPath: window.location.hash,
-
-      firstLoad: true,
-      showOneMoment: false,
     }
   },
   computed: {
     currentView() {
       return routes[this.currentPath.slice(1) || '/'] || ClientIndex
     },
-    showSpinner() {
-      return (noSpinner.indexOf(this.currentView) != -1) && this.firstLoad;
-    }
   },
   created() {
-    this.axios.interceptors.response.use((response) => {
-        this.firstLoad = false;
-        return response;
-      }, function (error) {
-        return Promise.reject(error);
-      });
   },
   mounted() {
     window.addEventListener('hashchange', () => {
       this.currentPath = window.location.hash
     });
 
-    setTimeout(() => {this.showOneMoment = true}, 3000);
   }
 }
 </script>
@@ -52,16 +38,7 @@ export default {
 
 <template>
 
-  <!-- spinner on first load -->
-  <div v-if="showSpinner" class="spinner-container">
-    <div class="spinner-border" role="status">
-      <span class="sr-only"></span>
-    </div>
-    <h4 class="mt-3" v-if="showOneMoment">Še čist mal</h4>
-  </div>
-
-  <!-- component view -->
-  <div v-show="!showSpinner" class="app">
+  <div class="app">
     <component :is="currentView" />
   </div>
 

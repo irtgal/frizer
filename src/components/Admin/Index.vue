@@ -1,5 +1,8 @@
 <template>
-  <div class="admin">
+
+  <loader v-if="firstLoad" />
+  
+  <div v-else class="admin">
 
     <template v-if="!loading">
       <div class="text-center mb-3">
@@ -78,7 +81,7 @@
 
 <script>
 
-import {backendUrl} from '../../config.js';
+import axios from '../../helpers/axios.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
 
 export default {
@@ -93,6 +96,7 @@ export default {
       loadDaysNumber: 4,
 
       loading: true,
+      firstLoad: true,
       deleteLoading: false,
 
       checkedTermIds: [],
@@ -116,7 +120,7 @@ export default {
   methods: {
       fetchTimetable() {
         this.loading = true;
-        this.axios.get(`${backendUrl}/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
+        axios.get(`/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data;
                 
@@ -126,9 +130,12 @@ export default {
                 }
                 this.loading = false;
             })
+            .finally(() => {
+              this.firstLoad = false;
+            })
       },
       fetchTypes() {
-        this.axios.get(`${backendUrl}/client/types`)
+        axios.get(`/client/types`)
             .then((response) => {
                 this.types = response.data;
             });
@@ -155,7 +162,7 @@ export default {
           return;
         }
         this.deleteLoading = true;
-        this.axios.post(`${backendUrl}/admin/terms/delete`, {
+        axios.post(`/admin/terms/delete`, {
           'ids': this.checkedTermIds,
         })
         .then(() => {

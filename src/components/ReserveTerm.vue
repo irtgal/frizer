@@ -76,9 +76,9 @@
 
 <script>
 
-import {backendUrl} from '../config.js';
 import {dayName, formatDate} from '../helpers/functions.js';
 import State from '../helpers/State.js';
+import axios from '../helpers/axios.js';
 
 export default {
   name: 'ReserveTerm',
@@ -116,7 +116,7 @@ export default {
           return;
         }
         this.sendingData = true;
-        this.axios.patch(`${backendUrl}/client/terms/${this.term.id}`, {
+        axios.patch(`/client/terms/${this.term.id}`, {
           'reserved': true,
           'name': this.name,
           'contact': this.contact,
@@ -148,7 +148,7 @@ export default {
           this.error = 'Vnesite pravilen email naslov';
           return;
         }
-        this.axios.patch(`${backendUrl}/admin/terms/${this.term.id}`, {
+        axios.patch(`/admin/terms/${this.term.id}`, {
           'reserved': true,
           'name': this.name,
           'contact': this.contact,
@@ -166,7 +166,7 @@ export default {
 
       },
       clearTerm() {
-        this.axios.patch(`${backendUrl}/admin/terms/${this.term.id}`, {
+        axios.patch(`/admin/terms/${this.term.id}`, {
           'reserved': false,
         })
         .then(() => {
@@ -175,7 +175,7 @@ export default {
         })
       },
       remove() {
-          this.axios.delete(`${backendUrl}/admin/terms/${this.term.id}`)
+          axios.delete(`/admin/terms/${this.term.id}`)
             .then(() => {
                 this.$emit('saved');
                 this.cancel();

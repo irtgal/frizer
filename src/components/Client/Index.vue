@@ -1,8 +1,10 @@
 <template>
 
-  <div class="admin">
+  <loader v-if="firstLoad" />
 
-    <template v-if="!loading && firstAvailableDate">
+  <div v-else class="admin">
+
+    <template v-if="firstAvailableDate">
 
       <div class="text-center">
         <a class="text-muted" role="button" @click="reload()" style="font-size: 12px;">
@@ -67,8 +69,8 @@
 
 <script>
 
-import {backendUrl} from '../../config.js';
 import {dayName, formatDate} from '../../helpers/functions.js';
+import axios from '../../helpers/axios.js';
 
 export default {
   name: 'ClientIndex',
@@ -83,6 +85,7 @@ export default {
 
       loadDaysNumber: 3,
 
+      firstLoad: true,
       loading: true,
 
       selectedTerm: null,
@@ -102,7 +105,7 @@ export default {
   methods: {
       fetchTimetable() {
         this.loading = true;
-        this.axios.get(`${backendUrl}/client/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
+        axios.get(`/client/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data.timetable;
                 this.firstAvailableDate = response.data["first_available_date"];
@@ -117,10 +120,11 @@ export default {
             })
             .finally(() => {
               this.loading = false;
+              this.firstLoad = false;
             });
       },
       fetchTypes() {
-        this.axios.get(`${backendUrl}/client/types`)
+        axios.get(`/client/types`)
             .then((response) => {
                 this.types = response.data;
             });

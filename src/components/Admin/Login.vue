@@ -8,14 +8,13 @@
                 <input v-model="email" type="email" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Geslo</label>
-                <input type="password" class="form-control">
+                <label class="form-label">Geslo</label>
+                <input v-model="password" type="password" class="form-control">
             </div>
-            <div class="mb-3 form-check">
-                <input v-model="password" type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" >Check me out</label>
+            <div class="mb-3" v-if="error">
+              <p class="text-danger">{{error}}</p>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Prijava</button>
+            <button type="submit" @click="login()" class="btn btn-primary w-100">Prijava</button>
         </div>
     </div>
   </div>
@@ -23,15 +22,40 @@
 
 <script>
 
+import axios from '../../helpers/axios.js';
+
 export default {
   name: 'ShowTerm',
   data: function () {
     return {
         email: "",
         password: "",
+        error: "",
     }
   },
   methods: {
+    login() {
+      console.log("login");
+      console.log(this.email, this.password);
+      if (!this.email || !this.password) {
+        this.error = "Manjkajo podatki";
+        return;
+      }
+      console.log('Axios: ');
+      axios.post('/admin/login', {'email': this.email, 'password': this.password})
+        .then((response) => {
+          if (!response.data.token) {
+            this.error = "Neveljavni podatki";
+            return;
+          }
+          localStorage.setItem("token", response.data.token);
+          window.location.hash = `/admin`;
+        })
+        .catch(() => {
+          this.error = "Neveljavni podatki";
+        })
+
+    }
   },
   
 }

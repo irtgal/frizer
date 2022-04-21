@@ -30,7 +30,7 @@
 
 <script>
 
-import {backendUrl} from '../../config.js';
+import axios from '../../helpers/axios.js';
 
 export default {
   name: 'AddTerm',
@@ -67,7 +67,7 @@ export default {
         this.start = `${this.start.split(':')[0]}:${startMinutes}`;
         this.end = `${this.end.split(':')[0]}:${endMinutes}`;
 
-        this.axios.post(`${backendUrl}/admin/terms`, {'start': this.start, 'end': this.end, 'date': this.date})
+        axios.post(`/admin/terms`, {'start': this.start, 'end': this.end, 'date': this.date})
             .then(() => {                
                 this.$emit('saved');
                 this.cancel();
