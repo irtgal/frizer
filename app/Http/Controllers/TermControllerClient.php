@@ -21,7 +21,7 @@ class TermControllerClient extends Controller
      */
     public function index(Request $request)
     {
-        $minAvailableDate = Term::where('full_time', '>=', date("Y-m-d"))
+        $minAvailableDate = Term::where('admin_id', admin()->id)->where('full_time', '>=', date("Y-m-d"))
                 ->where('reserved', false)
                 ->min('full_time');
         if ($minAvailableDate) {
@@ -30,7 +30,7 @@ class TermControllerClient extends Controller
             $minAvailableDate = null;
         }
 
-        $maxAvailableDate = Term::where('reserved', false)->max('full_time');
+        $maxAvailableDate = Term::where('admin_id', admin()->id)->where('reserved', false)->max('full_time');
         if ($maxAvailableDate) {
             $maxAvailableDate = Carbon::parse($maxAvailableDate)->format('Y-m-d');
         } else {
@@ -51,7 +51,7 @@ class TermControllerClient extends Controller
         for ($i = 0; $i < $loadDays; $i++) {
             $incrementDay = strtotime("+" . $i . "day", strtotime($startDate));
             $incrementedDate = date("Y-m-d", $incrementDay);
-            $termsForDay[$incrementedDate] = Term::whereDate('full_time', $incrementedDate)->where('reserved', false)->orderBy('full_time')->get();
+            $termsForDay[$incrementedDate] = Term::where('admin_id', admin()->id)->whereDate('full_time', $incrementedDate)->where('reserved', false)->orderBy('full_time')->get();
         }
 
 
@@ -66,7 +66,7 @@ class TermControllerClient extends Controller
     // reserve or unreserve term
     public function update(Request $request, $id)
     {
-        $term = Term::findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
         if ($request['reserved'] && $request['name'] && $request['type']) {
             if ($term->reserved) {
                 return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);

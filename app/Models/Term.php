@@ -11,7 +11,7 @@ class Term extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['full_time', 'name', 'type', 'contact', 'reserved'];
+    protected $fillable = ['full_time', 'name', 'type', 'contact', 'reserved', 'admin_id'];
     protected $appends = ['date', 'time'];
 
     protected static function boot() {

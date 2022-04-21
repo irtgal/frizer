@@ -13,13 +13,14 @@ class AuthenticationController extends Controller
         $attr = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|d'
+            'password' => 'required'
         ]);
 
         $user = User::create([
             'name' => $attr['name'],
             'password' => bcrypt($attr['password']),
-            'email' => $attr['email']
+            'email' => $attr['email'],
+            'slug' => str_replace(' ', '-', strtolower($attr['name']))
         ]);
 
         return response()->json([
@@ -30,7 +31,7 @@ class AuthenticationController extends Controller
     public function login(Request $request)
     {
         $attr = $request->validate([
-            'email' => 'required|string|email|',
+            'email' => 'required|string|email',
             'password' => 'required|string|min:6'
         ]);
 

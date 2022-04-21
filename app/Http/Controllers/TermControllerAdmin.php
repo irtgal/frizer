@@ -30,7 +30,7 @@ class TermControllerAdmin extends Controller
         for ($i = 0; $i < $loadDays; $i++) {
             $incrementDay = strtotime("+" . $i . "day", strtotime($startDate));
             $incrementedDate = date("Y-m-d", $incrementDay);
-            $termsForDay[$incrementedDate] = Term::whereDate('full_time', $incrementedDate)->orderBy('full_time')->get();
+            $termsForDay[$incrementedDate] = Term::where('admin_id', admin()->id)->whereDate('full_time', $incrementedDate)->orderBy('full_time')->get();
         }
         return response()->json($termsForDay);
     }
@@ -51,8 +51,8 @@ class TermControllerAdmin extends Controller
         $startTime = Carbon::createFromFormat('H:i Y-m-d',  $data['start'] . " " . $data["date"]);
         $endTime = Carbon::createFromFormat('H:i Y-m-d',  $data['end'] . " " . $data["date"]);
         while ($startTime < $endTime) {
-            if (!Term::where('full_time', $startTime)->exists()) {
-                Term::create(['full_time' => $startTime]);
+            if (!Term::where('admin_id', admin()->id)->where('full_time', $startTime)->exists()) {
+                Term::create(['full_time' => $startTime, 'admin_id' => admin()->id ]);
             }
             $startTime = $startTime->addMinutes(30);
         }
@@ -80,7 +80,7 @@ class TermControllerAdmin extends Controller
      */
     public function update(Request $request, $id)
     {
-        $term = Term::findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
         if ($request['reserved'] && $request['name'] && $request['type']) {
             if ($term->reserved) {
                 return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
@@ -103,7 +103,7 @@ class TermControllerAdmin extends Controller
     {
         $ids = $request['ids'];
         foreach ($ids as $id) {
-            $term = Term::findOrFail($id);
+            $term = Term::where('admin_id', admin()->id)->findOrFail($id);
             $term->delete();
         }
         return true;
@@ -113,7 +113,7 @@ class TermControllerAdmin extends Controller
     {
         $ids = $request['ids'];
         foreach ($ids as $id) {
-            $term = Term::findOrFail($id);
+            $term = Term::where('admin_id', admin()->id)->findOrFail($id);
             $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
         }
         return true;
@@ -127,7 +127,7 @@ class TermControllerAdmin extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $term = Term::findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
         $status = $term->delete();
         if ($status != 1) {
             return response()->json(false, 500);

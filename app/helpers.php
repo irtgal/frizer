@@ -3,6 +3,14 @@
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailClass;
 use Carbon\Carbon;
+use App\Models\User;
+
+if (!function_exists('admin')){
+    function admin() {
+        $admin_slug = request()->route('admin_slug');
+        return User::where("slug", $admin_slug)->first();
+    }
+}
 
 if (!function_exists('send_mail_new_reservation')){
     function send_mail_new_reservation($term) {

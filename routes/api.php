@@ -20,20 +20,29 @@ use App\Http\Controllers\TermControllerClient;
 */
 
 
-// AUTH
+// auth
 Route::post('/admin/register', [AuthenticationController::class, 'register']);
 Route::post('/admin/login', [AuthenticationController::class, 'login']);
 
+Route::group([
+    'prefix'     => '/{admin_slug}',
+    'middleware' => \App\Http\Middleware\IdentifyAdmin::class,
+], function () {
+    // ADMIN
+    Route::post('/admin/login', [AuthenticationController::class, 'login']);
 
-// ADMIN
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('/admin/terms', TermControllerAdmin::class);
-    Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::apiResource('/admin/terms', TermControllerAdmin::class);
+        Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
+    });
+
+    // zankrat se ne uporablja
+    Route::post('/admin/terms/clear', [TermControllerAdmin::class, 'clearMany']);
+
+    // client
+    Route::apiResource('/client/terms', TermControllerClient::class);
+    Route::get('/client/types', [TermControllerClient::class, 'types']);
+
+
 });
 
-// zankrat se ne uporablja
-Route::post('/admin/terms/clear', [TermControllerAdmin::class, 'clearMany']);
-
-// client
-Route::apiResource('/client/terms', TermControllerClient::class);
-Route::get('/client/types', [TermControllerClient::class, 'types']);
