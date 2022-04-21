@@ -23,6 +23,7 @@
 <script>
 
 import axios from '../../helpers/axios.js';
+import {prepareAdminToken} from '../../helpers/functions.js';
 
 export default {
   name: 'ShowTerm',
@@ -46,13 +47,14 @@ export default {
             return;
           }
           localStorage.setItem("token", response.data.token);
-          window.location.hash = `/admin`;
+          prepareAdminToken();
+          this.$router.push({name: 'admin-index'});
         })
         .catch(() => {
           this.error = "Neveljavni podatki";
         })
 
-    }
+    },
   },
   
 }

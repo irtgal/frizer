@@ -14,10 +14,6 @@ export function dayName(date) {
 
   export function prepareAdminToken() {
     const token = localStorage.getItem("token");
-    if (!token) {
-        window.location.hash = `/admin/prijava`;
-        return;
-    }
     Axios.interceptors.request.use((request) => {
         request.headers = {
           'Authorization': 'Bearer ' + token,

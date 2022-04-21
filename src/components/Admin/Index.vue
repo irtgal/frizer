@@ -168,7 +168,10 @@ export default {
         .then(() => {
           this.fetchTimetable();
           this.checkedTermIds = [];
-          });
+          })
+        .finally(() => {
+          this.deleteLoading = false;
+        })
       },
 
       selectTerm(term) {
