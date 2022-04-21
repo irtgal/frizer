@@ -1,5 +1,5 @@
 <template>
-
+<div>
   <loader v-if="firstLoad" />
   
   <div v-else class="admin">
@@ -77,8 +77,8 @@
   <reserve-term v-if="selectedTerm" :admin="true" :term="selectedTerm" :types="types"
     @cancel="selectTerm(null)" @saved="fetchTimetable" />
   
+</div>
 </template>
-
 <script>
 
 import axios from '../../helpers/axios.js';

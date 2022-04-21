@@ -1,8 +1,9 @@
 <template>
+<div>
 
   <loader v-if="firstLoad" />
 
-  <div v-else class="admin">
+  <div v-else class="client">
 
     <template v-if="firstAvailableDate">
 
@@ -64,7 +65,8 @@
 
   <reserve-term v-if="selectedTerm" :admin="false"
    @cancel="selectTerm(null)" :term="selectedTerm" :types="types" @saved="fetchTimetable" />
-  
+
+</div>
 </template>
 
 <script>

@@ -35,13 +35,10 @@ export default {
   },
   methods: {
     login() {
-      console.log("login");
-      console.log(this.email, this.password);
       if (!this.email || !this.password) {
         this.error = "Manjkajo podatki";
         return;
       }
-      console.log('Axios: ');
       axios.post('/admin/login', {'email': this.email, 'password': this.password})
         .then((response) => {
           if (!response.data.token) {

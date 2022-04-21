@@ -1,50 +1,28 @@
+
+<template>
+
+  <router-view/>
+
+</template>
+
 <script>
-import AdminLogin from './components/Admin/Login.vue';
-import AdminIndex from './components/Admin/Index.vue';
-import ClientIndex from './components/Client/Index.vue';
-import TermConfirmation from './components/Client/TermConfirmation.vue';
-
-
-const routes = {
-  '/prijava': AdminLogin,
-  '/admin': AdminIndex,
-
-  '/': ClientIndex,
-  '/potrditev': TermConfirmation,
-}
 
 export default {
   data() {
     return {
-      currentPath: window.location.hash,
     }
   },
   computed: {
-    currentView() {
-      return routes[this.currentPath.slice(1) || '/'] || ClientIndex
-    },
   },
   created() {
   },
   mounted() {
-    window.addEventListener('hashchange', () => {
-      this.currentPath = window.location.hash
-    });
 
   }
 }
 </script>
-
-
-<template>
-
-  <div class="app">
-    <component :is="currentView" />
-  </div>
-
-</template>
 <style>
-.app {
+#app {
   margin-top: 20px;
 }
 
