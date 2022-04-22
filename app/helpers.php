@@ -15,7 +15,7 @@ if (!function_exists('admin')){
 if (!function_exists('send_mail_new_reservation')){
     function send_mail_new_reservation($term) {
         $subject = "Nova rezervacija - " . $term->name;
-        Mail::to("urban.fujan2@gmail.com")->queue(new MailClass($term, "new_reservation", $subject));
+        Mail::to(admin()->email)->queue(new MailClass($term, "new_reservation", $subject));
     }
 }
 

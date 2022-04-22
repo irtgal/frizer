@@ -66,7 +66,7 @@ class TermControllerClient extends Controller
     // reserve or unreserve term
     public function update(Request $request, $id)
     {
-        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         if ($request['reserved'] && $request['name'] && $request['type']) {
             if ($term->reserved) {
                 return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
@@ -83,7 +83,7 @@ class TermControllerClient extends Controller
 
     public function show(Request $request, $id)
     {
-        $term = Term::findOrFail($id);
+        $term = where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         return response()->json($term);
     }
 

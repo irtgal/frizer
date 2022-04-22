@@ -68,7 +68,7 @@ class TermControllerAdmin extends Controller
      */
     public function show(Request $request, $id)
     {
-        return Term::findOrFail($id);
+        return Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
     }
 
     /**
@@ -80,7 +80,7 @@ class TermControllerAdmin extends Controller
      */
     public function update(Request $request, $id)
     {
-        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         if ($request['reserved'] && $request['name'] && $request['type']) {
             if ($term->reserved) {
                 return response()->json(['error'=> 'Nekdo je ravnokar rezerviral ta termin.']);
@@ -103,7 +103,7 @@ class TermControllerAdmin extends Controller
     {
         $ids = $request['ids'];
         foreach ($ids as $id) {
-            $term = Term::where('admin_id', admin()->id)->findOrFail($id);
+            $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
             $term->delete();
         }
         return true;
@@ -113,7 +113,7 @@ class TermControllerAdmin extends Controller
     {
         $ids = $request['ids'];
         foreach ($ids as $id) {
-            $term = Term::where('admin_id', admin()->id)->findOrFail($id);
+            $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
             $term->update(['reserved'=> false, 'name' => null, 'type'=> null,'contact'=> null]);
         }
         return true;
@@ -127,7 +127,7 @@ class TermControllerAdmin extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $term = Term::where('admin_id', admin()->id)->findOrFail($id);
+        $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         $status = $term->delete();
         if ($status != 1) {
             return response()->json(false, 500);
