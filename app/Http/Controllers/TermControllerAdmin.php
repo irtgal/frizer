@@ -66,7 +66,7 @@ class TermControllerAdmin extends Controller
      * @param  \App\Models\Term  $term
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request,$admin_slug, $id)
     {
         return Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
     }
@@ -78,7 +78,7 @@ class TermControllerAdmin extends Controller
      * @param  \App\Models\Term  $term
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $admin_slug, $id)
     {
         $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         if ($request['reserved'] && $request['name'] && $request['type']) {
@@ -125,7 +125,7 @@ class TermControllerAdmin extends Controller
      * @param  \App\Models\Term  $term
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $admin_slug, $id)
     {
         $term = Term::where('admin_id', admin()->id)->where('id', $id)->firstOrFail();
         $status = $term->delete();

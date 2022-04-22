@@ -39,10 +39,17 @@ class MailClass extends Mailable
         $pretty_time = day_of_week($this->term->full_time) . ", ".  $pretty_date . " ob " . $this->term->time;
         $type_name = $this->term->service_type->name;
         $type_price = $this->term->service_type->price;
+        $admin_name = admin()->name;
         return $this->view('emails.' . $this->template)
-            ->with(["name" => $this->term->name, "pretty_time" => $pretty_time, "type_name" => $type_name, "type_price" => $type_price, "contact" => $this->term->contact])
+            ->with([
+                "admin_name" => $admin_name,
+                "name" => $this->term->name,
+                "pretty_time" => $pretty_time,
+                "type_name" => $type_name,
+                "type_price" => $type_price,
+                "contact" => $this->term->contact])
             ->subject($this->subject)
-            ->from(env("MAIL_USERNAME"), env('MAIL_FROM_NAME'));
+            ->from(admin()->email, admin()->name);
         
     }
 }

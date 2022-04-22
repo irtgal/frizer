@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthenticationController extends Controller
 {
@@ -30,6 +32,7 @@ class AuthenticationController extends Controller
     //use this method to signin users
     public function login(Request $request)
     {
+
         $attr = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string|min:6'
@@ -38,6 +41,13 @@ class AuthenticationController extends Controller
         if (!Auth::attempt($attr)) {
             return response()->json("Neveljavni podatki");
         }
+        // dva valid tokena na admina
+        $validTokenIds = PersonalAccessToken::
+            where('tokenable_id', admin()->id)
+            ->orderBy("last_used_at", 'desc')
+            ->take(1)
+            ->pluck('id');
+        PersonalAccessToken::where('tokenable_id', admin()->id)->whereNotIn('id', $validTokenIds)->delete();
 
         return response()->json([
             'token' => auth()->user()->createToken('API Token')->plainTextToken
