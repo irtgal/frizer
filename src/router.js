@@ -19,8 +19,15 @@ const routes = [
     component: BaseView,
     children: [
       // CLIENT ROUTES
-      { path: '', component: ClientIndex },
-      { path: 'potrditev', component: TermConfirmation },
+      { 
+        path: '',
+        component: ClientIndex
+      },
+      {
+        path: 'potrditev',
+        name: 'confirmation',
+        component: TermConfirmation
+      },
 
       // ADMIN ROUTES    
       {

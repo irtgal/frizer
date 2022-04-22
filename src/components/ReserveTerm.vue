@@ -130,7 +130,7 @@ export default {
             }
             localStorage.setItem('email', this.contact);
             State.setTerm(this.term);
-            window.location.hash = `/potrditev`;
+            this.$router.push({name: 'confirmation'});
           });
 
       },
