@@ -47,8 +47,10 @@ export default {
             return;
           }
           localStorage.setItem("token", response.data.token);
+          console.log("login token: ", localStorage.getItem("token"));
           prepareAdminToken();
           this.$router.push({name: 'admin-index'});
+          console.log("pushing");
         })
         .catch(() => {
           this.error = "Neveljavni podatki";

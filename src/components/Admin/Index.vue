@@ -120,6 +120,7 @@ export default {
   methods: {
       fetchTimetable() {
         this.loading = true;
+        console.log(axios.interceptors);
         axios.get(`/admin/terms`, {params: {"start_date": this.startDate, "load_days": this.loadDaysNumber}})
             .then((response) => {
                 this.timetable = response.data;
@@ -211,6 +212,7 @@ export default {
       }
   },
   created() {
+      console.log("admin index created");
       this.fetchTypes();
       this.fetchTimetable();
   },

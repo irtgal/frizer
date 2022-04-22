@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {backendUrl} from '../config.js';
 
-const adminSlug = window.location.hash.split("/")[1];
+const adminSlug = window.location.pathname.split("/")[1];
 const adminString = (adminSlug) ? `/${adminSlug}` : ''; 
 
 const axiosInstance = axios.create({
@@ -10,4 +10,4 @@ baseURL: `${backendUrl}${adminString}`,
 
 
 
-export default axiosInstance;
+export {axiosInstance as default};
