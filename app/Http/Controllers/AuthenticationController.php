@@ -38,7 +38,7 @@ class AuthenticationController extends Controller
             'password' => 'required|string|min:6'
         ]);
 
-        if (!Auth::attempt($attr)) {
+        if (!Auth::attempt($attr) || admin()->id != auth('sanctum')->user()->id) {
             return response()->json("Neveljavni podatki");
         }
         // dva valid tokena na admina

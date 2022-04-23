@@ -7,6 +7,10 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\TermControllerAdmin;
 use App\Http\Controllers\TermControllerClient;
 
+use \App\Http\Middleware\IdentifyAdmin;
+use \App\Http\Middleware\AuthAdmin;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +30,12 @@ Route::post('/admin/login', [AuthenticationController::class, 'login']);
 
 Route::group([
     'prefix'     => '/{admin_slug}',
-    'middleware' => \App\Http\Middleware\IdentifyAdmin::class,
+    'middleware' => IdentifyAdmin::class,
 ], function () {
     // ADMIN
     Route::post('/admin/login', [AuthenticationController::class, 'login']);
 
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['middleware' => ['auth:sanctum', AuthAdmin::class]], function () {
         Route::apiResource('/admin/terms', TermControllerAdmin::class);
         Route::post('/admin/terms/delete', [TermControllerAdmin::class, 'deleteMany']);
     });
