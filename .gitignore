@@ -1,0 +1,25 @@
+
+
+# Ignore vendor dependencies (optional)
+backend/vendor/
+
+# Ignore compiled assets or build output (customize based on your project)
+frontend/public/build/
+frontend/dist/
+
+# Ignore logs and cache files (customize based on your project)
+backend//storage/logs/
+backend/storage/framework/cache/
+
+# Ignore composer lock file (if using Composer)
+backend/composer.lock
+
+frontend/node_modules/
+
+# Ignore npm/yarn lock files (if using npm or yarn)
+package-lock.json
+yarn.lock
+
+# Ignore any other generated or sensitive files
+*.log
+*.swp
